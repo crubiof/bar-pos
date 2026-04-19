@@ -159,7 +159,7 @@ input[readonly]{background:#f5f5f3;color:#444}
         Your Stripe Payment Link. Guests open this on their phone and enter the amount you tell them.<br>
         Create or find yours at <a href="https://dashboard.stripe.com/payment-links" target="_blank" style="color:#185FA5">dashboard.stripe.com/payment-links</a>.
       </p>
-      <div class="field"><label>Payment link URL</label><input id="stripe-link" value="https://buy.stripe.com/test_7sY14ofzrfwS8e7dzVe7m00"></div>
+      <div class="field"><label>Payment link URL</label><input id="stripe-link" value="https://buy.stripe.com/14A00k3QJfwScun3Zle7m01"></div>
       <button class="action-btn" onclick="saveSettings()">Save</button>
       <span id="settings-status" style="font-size:12px;margin-left:8px;color:#27ae60"></span>
     </div>
@@ -246,7 +246,7 @@ const cats=[
 ];
 
 let guests={},cart=[],selectedGuest=null,transactions=[],nextId=300;
-let stripeLink='https://buy.stripe.com/test_7sY14ofzrfwS8e7dzVe7m00';
+let stripeLink='https://buy.stripe.com/14A00k3QJfwScun3Zle7m01';
 let pendingPayment=null;
 
 const fmt=n=>'$'+n.toFixed(2);
