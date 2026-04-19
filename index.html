@@ -28,6 +28,28 @@
   --red-bg:    #280c08;
   --red-txt:   #d06050;
 }
+body.light{
+  --bg:        #f5f3ee;
+  --bg2:       #ffffff;
+  --bg3:       #eeebe4;
+  --border:    #d8d2c4;
+  --border2:   #c4bdb0;
+  --text:      #1a1814;
+  --text2:     #6b6050;
+  --text3:     #a09080;
+  --amber:     #b06800;
+  --amber-dim: #fdf0da;
+  --amber-mid: #e8a020;
+  --green:     #2a6e38;
+  --green-bg:  #eaf5ec;
+  --green-txt: #1e5a2c;
+  --blue:      #1a50a0;
+  --blue-bg:   #e8f0fb;
+  --blue-txt:  #1a50a0;
+  --red:       #a02010;
+  --red-bg:    #fdecea;
+  --red-txt:   #a02010;
+}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:18px;font-weight:500}
 
 .topbar{display:flex;align-items:center;justify-content:space-between;padding:.75rem 1.5rem;background:var(--bg2);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:50}
@@ -149,7 +171,10 @@ input::placeholder{color:var(--text3)}
     <div class="topbar-metric"><div class="lbl">Charges</div><div class="val" id="m-count">0</div></div>
     <div class="topbar-metric"><div class="lbl">Open tabs</div><div class="val" id="m-tabs">0</div></div>
   </div>
-  <button class="btn-amber" onclick="openModal('new-guest-modal')" style="width:auto;padding:7px 16px;font-size:13px">+ New guest</button>
+  <div style="display:flex;align-items:center;gap:10px">
+    <button id="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark" style="padding:8px 14px;font-size:18px;border-radius:8px;border:1px solid var(--border2);background:transparent;cursor:pointer;color:var(--text);line-height:1">🌙</button>
+    <button class="btn-amber" onclick="openModal('new-guest-modal')" style="width:auto;padding:7px 16px;font-size:13px">+ New guest</button>
+  </div>
 </div>
 
 <div class="nav-tabs">
@@ -297,6 +322,29 @@ input::placeholder{color:var(--text3)}
 <!-- SETTINGS -->
 <div id="settings" class="page-single">
   <p style="font-size:20px;font-weight:700;margin-bottom:1rem;color:var(--text)">Settings</p>
+  <div class="card" style="max-width:520px;margin-bottom:1rem">
+    <p class="card-title">Theme</p>
+    <p style="font-size:14px;color:var(--text2);margin-bottom:14px;line-height:1.6">Switch manually or set a schedule to go light during the day and dark at night automatically.</p>
+    <div style="display:flex;gap:10px;margin-bottom:16px">
+      <button onclick="setTheme('dark')" id="btn-dark" style="flex:1;padding:12px;font-size:15px;font-weight:700;border-radius:8px;border:2px solid var(--amber-mid);background:var(--amber-dim);color:var(--amber);cursor:pointer">🌙 Dark</button>
+      <button onclick="setTheme('light')" id="btn-light" style="flex:1;padding:12px;font-size:15px;font-weight:700;border-radius:8px;border:1px solid var(--border2);background:var(--bg3);color:var(--text2);cursor:pointer">☀️ Light</button>
+      <button onclick="setTheme('auto')" id="btn-auto" style="flex:1;padding:12px;font-size:15px;font-weight:700;border-radius:8px;border:1px solid var(--border2);background:var(--bg3);color:var(--text2);cursor:pointer">⏰ Auto</button>
+    </div>
+    <div id="auto-schedule" style="display:none">
+      <p style="font-size:13px;color:var(--text2);margin-bottom:10px">Light mode runs between these hours. Dark outside that range.</p>
+      <div style="display:flex;gap:10px;align-items:center">
+        <div style="flex:1">
+          <label style="font-size:12px;font-weight:700;color:var(--text3);display:block;margin-bottom:4px;text-transform:uppercase">Light from</label>
+          <input type="time" id="light-from" value="08:00" onchange="saveThemeSettings()" style="font-size:15px">
+        </div>
+        <div style="flex:1">
+          <label style="font-size:12px;font-weight:700;color:var(--text3);display:block;margin-bottom:4px;text-transform:uppercase">Light until</label>
+          <input type="time" id="light-until" value="20:00" onchange="saveThemeSettings()" style="font-size:15px">
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="card" style="max-width:520px">
     <p class="card-title">Stripe payment link</p>
     <p style="font-size:13px;color:var(--text2);margin-bottom:12px;line-height:1.6">Guests open this link and enter the amount you tell them.</p>
@@ -891,6 +939,67 @@ function confirmClearAll(){
   setTimeout(()=>st.textContent='',3000);
 }
 
+function setTheme(mode){
+  localStorage.setItem('barpos_theme_mode', mode);
+  const from  = document.getElementById('light-from')?.value  || '08:00';
+  const until = document.getElementById('light-until')?.value || '20:00';
+  localStorage.setItem('barpos_light_from',  from);
+  localStorage.setItem('barpos_light_until', until);
+  applyTheme();
+  updateThemeButtons();
+  const sched = document.getElementById('auto-schedule');
+  if(sched) sched.style.display = mode==='auto' ? 'block' : 'none';
+}
+
+function saveThemeSettings(){
+  const from  = document.getElementById('light-from')?.value  || '08:00';
+  const until = document.getElementById('light-until')?.value || '20:00';
+  localStorage.setItem('barpos_light_from',  from);
+  localStorage.setItem('barpos_light_until', until);
+  applyTheme();
+}
+
+function applyTheme(){
+  const mode  = localStorage.getItem('barpos_theme_mode') || 'dark';
+  const from  = localStorage.getItem('barpos_light_from')  || '08:00';
+  const until = localStorage.getItem('barpos_light_until') || '20:00';
+  let isLight = false;
+  if(mode==='light') isLight = true;
+  else if(mode==='auto'){
+    const now   = new Date();
+    const cur   = now.getHours()*60 + now.getMinutes();
+    const [fh,fm]  = from.split(':').map(Number);
+    const [uh,um]  = until.split(':').map(Number);
+    const start = fh*60+fm, end = uh*60+um;
+    isLight = cur >= start && cur < end;
+  }
+  document.body.classList.toggle('light', isLight);
+  const icon = document.getElementById('theme-toggle');
+  if(icon) icon.textContent = isLight ? '🌙' : '☀️';
+}
+
+function updateThemeButtons(){
+  const mode = localStorage.getItem('barpos_theme_mode') || 'dark';
+  ['dark','light','auto'].forEach(m=>{
+    const btn = document.getElementById('btn-'+m);
+    if(!btn) return;
+    const active = m===mode;
+    btn.style.border    = active ? '2px solid var(--amber-mid)' : '1px solid var(--border2)';
+    btn.style.background= active ? 'var(--amber-dim)'           : 'var(--bg3)';
+    btn.style.color     = active ? 'var(--amber)'               : 'var(--text2)';
+  });
+  const sched = document.getElementById('auto-schedule');
+  if(sched) sched.style.display = mode==='auto' ? 'block' : 'none';
+}
+
+function toggleTheme(){
+  const isLight = document.body.classList.contains('light');
+  setTheme(isLight ? 'dark' : 'light');
+}
+
+// Re-check auto schedule every minute
+setInterval(applyTheme, 60000);
+
 function saveSettings(){
   stripeLink=document.getElementById('stripe-link').value.trim();
   saveState();
@@ -898,6 +1007,14 @@ function saveSettings(){
   st.textContent='Saved!';setTimeout(()=>st.textContent='',2000);
 }
 
+applyTheme();
+updateThemeButtons();
+(function(){
+  const from  = localStorage.getItem('barpos_light_from');
+  const until = localStorage.getItem('barpos_light_until');
+  if(from  && document.getElementById('light-from'))  document.getElementById('light-from').value  = from;
+  if(until && document.getElementById('light-until')) document.getElementById('light-until').value = until;
+})();
 renderGrid();
 renderGuestPills();
 updateMetrics();
