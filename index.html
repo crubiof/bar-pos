@@ -757,6 +757,28 @@ function saveTabEdit(){
   updateMetrics();
 }
 
+function deleteTab(id){
+  const g = guests[id];
+  if(!g) return;
+  const pin = prompt('Enter PIN to delete tab for "' + g.name + '":');
+  if(pin === null) return;
+  if(pin !== '16735330'){
+    alert('Incorrect PIN.');
+    return;
+  }
+  // Remove tab transactions from history
+  transactions = transactions.filter(t => !(t.status==='tab' && t.guest===g.name));
+  // Clear selection if this was selected
+  if(selectedGuest === id) { selectedGuest = null; cart = []; }
+  delete guests[id];
+  saveState();
+  renderTabsGrid();
+  renderGuestPills();
+  renderCartPanel();
+  renderGrid();
+  updateMetrics();
+}
+
 function renderTabsGrid(){
   const keys=Object.keys(guests);
   const el=document.getElementById('tabs-grid');
@@ -780,6 +802,7 @@ function renderTabsGrid(){
         <button class="action-btn" style="flex:1;text-align:center;font-size:14px;min-width:100px;color:var(--amber);border-color:var(--amber-mid)" onclick="openEditTab('${k}')">Edit order</button>
         <button class="btn-blue" style="flex:1;padding:8px;font-size:14px;min-width:100px" onclick="closeGuestTabWithPayment('${k}','stripe')">Link · ${fmt(g.total)}</button>
         <button class="btn-green" style="flex:1;padding:8px;font-size:14px;min-width:100px" onclick="closeGuestTabWithPayment('${k}','cash')">Cash · ${fmt(g.total)}</button>
+        <button class="action-btn danger-btn" style="flex:1;text-align:center;font-size:14px;min-width:100px" onclick="deleteTab('${k}')">Delete tab</button>
       </div>
     </div>`;
   }).join('');
