@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bar POS</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f5f3;color:#1a1a18;min-height:100vh;padding:1.5rem}
+.container{max-width:720px;margin:0 auto}
+h1{font-size:20px;font-weight:500;margin-bottom:1.25rem}
+.nav{display:flex;gap:4px;margin-bottom:1.5rem;flex-wrap:wrap}
+.nav button{padding:7px 16px;font-size:13px;border-radius:8px;border:1px solid #ccc;background:transparent;color:#666;cursor:pointer;transition:all .15s}
+.nav button.active{background:#fff;color:#1a1a18;border-color:#888;font-weight:500;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.section{display:none}.section.active{display:block}
+.metrics{display:flex;gap:12px;margin-bottom:1rem;flex-wrap:wrap}
+.metric{background:#fff;border-radius:8px;padding:1rem;flex:1;min-width:110px;border:1px solid #e8e6e0}
+.metric .label{font-size:12px;color:#888;margin-bottom:4px}
+.metric .value{font-size:22px;font-weight:500}
+.card{background:#fff;border:1px solid #e8e6e0;border-radius:12px;padding:1.25rem;margin-bottom:1rem}
+.cat-label{font-size:11px;font-weight:600;color:#888;letter-spacing:.06em;text-transform:uppercase;grid-column:1/-1;margin-top:10px;margin-bottom:4px}
+.item-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(128px,1fr));gap:8px}
+.item-btn{padding:10px 8px;border-radius:8px;border:1px solid #ddd;background:#fff;cursor:pointer;text-align:center;transition:all .12s}
+.item-btn:hover{background:#f5f5f3;border-color:#aaa}
+.item-btn .name{font-size:12px;font-weight:500;color:#1a1a18;margin-bottom:2px;line-height:1.3}
+.item-btn .price{font-size:12px;color:#666}
+.item-btn .note{font-size:10px;color:#bbb;margin-top:2px;line-height:1.2}
+.item-btn.happy{border-color:#854F0B;background:#FAEEDA}
+.item-btn.happy .name{color:#412402}.item-btn.happy .price{color:#633806}
+.item-btn.disabled{opacity:.35;cursor:not-allowed}
+.cart-row{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f0ede8;font-size:13px}
+.cart-row:last-child{border-bottom:none}
+.qty-ctrl{display:flex;align-items:center;gap:6px}
+.qty-ctrl button{width:24px;height:24px;border-radius:50%;border:1px solid #ddd;background:#fff;cursor:pointer;font-size:15px;line-height:1;color:#1a1a18}
+.qty-ctrl button:hover{background:#f5f5f3}
+.guest-pill{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:20px;font-size:13px;font-weight:500;background:#E6F1FB;color:#185FA5;cursor:pointer;border:1px solid #B5D4F4;transition:all .12s;margin:3px}
+.guest-pill:hover{opacity:.8}
+.guest-pill.selected{background:#185FA5;color:#fff;border-color:#185FA5}
+.guest-pill .amt{font-size:11px;font-weight:400;opacity:.8;margin-left:2px}
+input,select{width:100%;padding:9px 11px;font-size:13px;border:1px solid #ddd;border-radius:8px;background:#fff;color:#1a1a18;outline:none}
+input:focus,select:focus{border-color:#888}
+input[readonly]{background:#f5f5f3;color:#444}
+.btn-blue{width:100%;padding:12px;font-size:14px;font-weight:500;border-radius:8px;border:none;background:#185FA5;color:#fff;cursor:pointer;transition:opacity .15s}
+.btn-blue:hover{opacity:.88}
+.btn-blue:disabled{opacity:.4;cursor:not-allowed}
+.btn-green{width:100%;padding:12px;font-size:14px;font-weight:500;border-radius:8px;border:1px solid #a8e6c3;background:#f0faf5;color:#27ae60;cursor:pointer;transition:opacity .15s}
+.btn-green:hover{opacity:.85}
+.action-btn{padding:8px 14px;font-size:13px;border-radius:8px;border:1px solid #ddd;background:#fff;cursor:pointer;color:#1a1a18;white-space:nowrap;transition:all .12s}
+.action-btn:hover{background:#f5f5f3}
+.danger-btn{color:#c0392b;border-color:#f5c6c6}
+.danger-btn:hover{background:#fff5f5}
+.section-title{font-size:16px;font-weight:500;margin-bottom:1rem}
+.tx-row{display:grid;grid-template-columns:1fr 75px 55px 55px 70px;gap:6px;align-items:center;padding:9px 0;border-bottom:1px solid #f0ede8;font-size:13px}
+.tx-row:last-child{border-bottom:none}
+.tx-head{font-size:11px;color:#888;font-weight:600;padding-bottom:8px;border-bottom:1px solid #e8e6e0;display:grid;grid-template-columns:1fr 75px 55px 55px 70px;gap:6px}
+.empty{font-size:13px;color:#bbb;padding:4px 0}
+.avatar{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500;background:#E6F1FB;color:#185FA5;flex-shrink:0}
+.badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:20px;font-weight:500}
+.badge-cash{background:#FEF3C7;color:#92400E}
+.badge-stripe{background:#DBEAFE;color:#1E40AF}
+.badge-tab{background:#F3F4F6;color:#6B7280}
+.modal-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.5);z-index:100;align-items:center;justify-content:center}
+.modal-overlay.open{display:flex}
+.modal{background:#fff;border-radius:12px;border:1px solid #e8e6e0;padding:1.5rem;width:340px;box-shadow:0 4px 24px rgba(0,0,0,.14)}
+.modal h3{font-size:15px;font-weight:500;margin-bottom:1.25rem}
+.field{margin-bottom:12px}
+.field label{font-size:12px;color:#888;display:block;margin-bottom:4px}
+.amount-display{font-size:42px;font-weight:500;color:#1a1a18;text-align:center;padding:1.25rem 0;line-height:1}
+.link-box{display:block;width:100%;padding:12px 14px;border-radius:8px;border:1px solid #B5D4F4;background:#E6F1FB;color:#185FA5;font-size:13px;font-weight:500;text-align:center;text-decoration:none;margin-bottom:8px;cursor:pointer;transition:opacity .15s}
+.link-box:hover{opacity:.85}
+.step{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px}
+.step-num{width:22px;height:22px;border-radius:50%;background:#f5f5f3;color:#888;font-size:12px;font-weight:500;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.step-text{font-size:13px;color:#666;line-height:1.5}
+.step-text strong{color:#1a1a18;font-weight:500}
+.tab-card{background:#fff;border:1px solid #e8e6e0;border-radius:12px;padding:1.25rem;margin-bottom:12px}
+@media(max-width:520px){
+  .tx-row,.tx-head{grid-template-columns:1fr 55px 55px 65px}
+  .tx-row span:nth-child(2),.tx-head span:nth-child(2){display:none}
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Bar POS</h1>
+  <div class="nav">
+    <button class="active" onclick="showTab('charge')">Charge</button>
+    <button onclick="showTab('tabs')">Open tabs</button>
+    <button onclick="showTab('transactions')">Transactions</button>
+    <button onclick="showTab('settings')">Settings</button>
+  </div>
+
+  <!-- CHARGE -->
+  <div id="charge" class="section active">
+    <div class="metrics">
+      <div class="metric"><div class="label">Today's revenue</div><div class="value" id="m-revenue">$0.00</div></div>
+      <div class="metric"><div class="label">Charges</div><div class="value" id="m-count">0</div></div>
+      <div class="metric"><div class="label">Open tabs</div><div class="value" id="m-tabs">0</div></div>
+    </div>
+
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+        <p style="font-size:11px;font-weight:600;color:#888;letter-spacing:.05em;text-transform:uppercase">Charging to</p>
+        <button class="action-btn" onclick="openModal('new-guest-modal')" style="font-size:12px;padding:5px 10px">+ New guest</button>
+      </div>
+      <div id="guest-pills"><p class="empty">No open tabs — create a guest first.</p></div>
+    </div>
+
+    <div class="card">
+      <div class="item-grid" id="item-grid"></div>
+      <div style="margin-top:14px;border-top:1px solid #f0ede8;padding-top:12px;display:flex;gap:8px;align-items:center">
+        <input id="custom-name" placeholder="Custom item" style="flex:2">
+        <input id="custom-price" placeholder="$0.00" type="number" min="0" step="0.01" style="flex:1">
+        <button class="action-btn" onclick="addCustom()">+ Add</button>
+      </div>
+    </div>
+
+    <div class="card" id="cart-card" style="display:none">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+        <p style="font-size:11px;font-weight:600;color:#888;letter-spacing:.05em;text-transform:uppercase">Order for <span id="cart-guest-name" style="color:#1a1a18;text-transform:none;letter-spacing:0">—</span></p>
+        <button class="action-btn danger-btn" style="font-size:12px;padding:4px 10px" onclick="clearCart()">Clear</button>
+      </div>
+      <div id="cart-items"></div>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding-top:10px;border-top:1px solid #e8e6e0;margin-top:4px">
+        <span style="font-size:13px;color:#888">Total</span>
+        <span style="font-size:18px;font-weight:500" id="cart-total">$0.00</span>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:12px">
+        <button class="btn-blue" id="add-tab-btn" onclick="addToTab()" style="flex:1">Add to tab</button>
+        <button class="btn-green" onclick="initCashPayment()" style="flex:1">Cash</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <div id="tabs" class="section">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
+      <p class="section-title" style="margin:0">Open tabs</p>
+      <button class="action-btn" onclick="openModal('new-guest-modal')">+ New guest</button>
+    </div>
+    <div id="tabs-full"></div>
+  </div>
+
+  <!-- TRANSACTIONS -->
+  <div id="transactions" class="section">
+    <p class="section-title">Transaction history</p>
+    <div class="card">
+      <div class="tx-head">
+        <span>Description</span><span>Guest</span><span>Time</span><span>Method</span><span style="text-align:right">Amount</span>
+      </div>
+      <div id="tx-list"><p class="empty" style="padding-top:8px">No transactions yet.</p></div>
+    </div>
+  </div>
+
+  <!-- SETTINGS -->
+  <div id="settings" class="section">
+    <p class="section-title">Payment settings</p>
+    <div class="card">
+      <p style="font-size:13px;color:#888;margin-bottom:14px;line-height:1.6">
+        Your Stripe Payment Link. Guests open this on their phone and enter the amount you tell them.<br>
+        Create or find yours at <a href="https://dashboard.stripe.com/payment-links" target="_blank" style="color:#185FA5">dashboard.stripe.com/payment-links</a>.
+      </p>
+      <div class="field"><label>Payment link URL</label><input id="stripe-link" value="https://buy.stripe.com/test_7sY14ofzrfwS8e7dzVe7m00"></div>
+      <button class="action-btn" onclick="saveSettings()">Save</button>
+      <span id="settings-status" style="font-size:12px;margin-left:8px;color:#27ae60"></span>
+    </div>
+  </div>
+</div>
+
+<!-- NEW GUEST MODAL -->
+<div class="modal-overlay" id="new-guest-modal" onclick="handleOverlay(event,'new-guest-modal')">
+  <div class="modal">
+    <h3>Open tab for guest</h3>
+    <div class="field"><label>Guest name *</label><input id="ng-name" placeholder="e.g. Maria, Table 4..." onkeydown="if(event.key==='Enter')createGuest()"></div>
+    <div class="field"><label>Note (optional)</label><input id="ng-note" placeholder="e.g. Table 7, VIP, birthday..."></div>
+    <div style="display:flex;gap:8px;margin-top:16px">
+      <button class="btn-blue" onclick="createGuest()" style="flex:1">Open tab</button>
+      <button class="action-btn" onclick="closeModal('new-guest-modal')" style="flex:1;text-align:center">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- STRIPE PAYMENT MODAL -->
+<div class="modal-overlay" id="stripe-modal" onclick="handleOverlay(event,'stripe-modal')">
+  <div class="modal">
+    <h3 id="stripe-modal-title">Collect payment</h3>
+    <div style="border-radius:8px;background:#f5f5f3;padding:.75rem 1rem;margin-bottom:16px">
+      <p style="font-size:11px;color:#888;margin-bottom:2px;text-align:center" id="stripe-guest-label"></p>
+      <div class="amount-display" id="stripe-amount">$0.00</div>
+      <p style="font-size:12px;color:#aaa;text-align:center;margin-top:4px" id="stripe-desc-label"></p>
+    </div>
+    <div class="step"><div class="step-num">1</div><div class="step-text"><strong>Tell the guest the amount</strong> shown above.</div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-text"><strong>Guest opens the payment link</strong> on their phone and enters that amount.</div></div>
+    <div class="step" style="margin-bottom:16px"><div class="step-num">3</div><div class="step-text"><strong>Once they pay</strong>, tap "Mark as paid" below.</div></div>
+    <a id="stripe-open-link" href="#" target="_blank" class="link-box">Open payment link →</a>
+    <p style="font-size:11px;color:#bbb;text-align:center;margin-bottom:16px;word-break:break-all" id="stripe-url-display"></p>
+    <div style="display:flex;gap:8px">
+      <button class="btn-blue" onclick="confirmStripePayment()" style="flex:1">Mark as paid</button>
+      <button class="action-btn" onclick="closeModal('stripe-modal')" style="flex:1;text-align:center">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- CASH MODAL -->
+<div class="modal-overlay" id="cash-modal" onclick="handleOverlay(event,'cash-modal')">
+  <div class="modal">
+    <h3>Cash payment</h3>
+    <p style="font-size:13px;color:#888;margin-bottom:16px">For <span id="cash-guest-name" style="font-weight:500;color:#1a1a18"></span></p>
+    <div class="field"><label>Amount due</label><input id="cash-amount-display" readonly></div>
+    <div class="field"><label>Cash received</label><input id="cash-received" type="number" min="0" step="0.01" placeholder="0.00" oninput="calcChange()"></div>
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-top:1px solid #e8e6e0;margin-bottom:16px">
+      <span style="font-size:13px;color:#888">Change</span>
+      <span style="font-size:22px;font-weight:500" id="cash-change">$0.00</span>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn-green" onclick="confirmCash()" style="flex:1">Confirm cash</button>
+      <button class="action-btn" onclick="closeModal('cash-modal')" style="flex:1;text-align:center">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<script>
+let menu=[
+  {id:1,name:'Cuba libre',price:8,cat:'cocktail'},
+  {id:2,name:'Gin tonic',price:8,cat:'cocktail'},
+  {id:3,name:'Tom Collins',price:8,cat:'cocktail'},
+  {id:4,name:'Spicy Paloma',price:8,cat:'cocktail'},
+  {id:5,name:'Mojito',price:8,cat:'cocktail'},
+  {id:6,name:'Happy hour 3x',price:20,cat:'happy',note:'3 cocktails · 6–8 PM'},
+  {id:7,name:"Devil's Margarita",price:10,cat:'special'},
+  {id:8,name:'Provetto Brut',price:25,cat:'vino'},
+  {id:9,name:'Cabernet Sauvignon',price:20,cat:'vino'},
+  {id:10,name:'Vino Rosato',price:20,cat:'vino'},
+  {id:11,name:'Club Verde',price:5,cat:'cerveza'},
+  {id:12,name:'Cubeta 5x',price:20,cat:'cerveza',note:'5 cervezas'},
+  {id:13,name:'Bacardi 700ml',price:70,cat:'botella',note:'Incluye hielos y Coca Cola'},
+  {id:14,name:'Tequila shot',price:5,cat:'shot'},
+];
+const cats=[
+  {key:'cocktail',label:'Cocktails — $8'},
+  {key:'happy',label:'Happy hour 6–8 PM'},
+  {key:'special',label:'Specials'},
+  {key:'vino',label:'Espumantes y vinos'},
+  {key:'cerveza',label:'Cervezas'},
+  {key:'botella',label:'Servicio de botella'},
+  {key:'shot',label:'Shots'},
+];
+
+let guests={},cart=[],selectedGuest=null,transactions=[],nextId=300;
+let stripeLink='https://buy.stripe.com/test_7sY14ofzrfwS8e7dzVe7m00';
+let pendingPayment=null;
+
+const fmt=n=>'$'+n.toFixed(2);
+const ts=()=>{const d=new Date();return d.getHours().toString().padStart(2,'0')+':'+d.getMinutes().toString().padStart(2,'0');};
+const initials=n=>n.trim().split(/\s+/).map(w=>w[0].toUpperCase()).slice(0,2).join('');
+
+function showTab(t){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));
+  document.getElementById(t).classList.add('active');
+  ['charge','tabs','transactions','settings'].forEach((n,i)=>{if(n===t)document.querySelectorAll('.nav button')[i].classList.add('active');});
+  if(t==='tabs')renderTabsFull();
+  if(t==='transactions')renderTx();
+}
+
+function openModal(id){
+  document.getElementById(id).classList.add('open');
+  if(id==='new-guest-modal')setTimeout(()=>document.getElementById('ng-name').focus(),60);
+  if(id==='cash-modal')setTimeout(()=>document.getElementById('cash-received').focus(),60);
+}
+function closeModal(id){
+  document.getElementById(id).classList.remove('open');
+  if(id==='new-guest-modal'){document.getElementById('ng-name').value='';document.getElementById('ng-note').value='';}
+  if(id==='cash-modal'){document.getElementById('cash-received').value='';document.getElementById('cash-change').textContent='$0.00';}
+  if(id==='stripe-modal')pendingPayment=null;
+}
+function handleOverlay(e,id){if(e.target===document.getElementById(id))closeModal(id);}
+
+function createGuest(){
+  const name=document.getElementById('ng-name').value.trim();
+  if(!name)return;
+  const note=document.getElementById('ng-note').value.trim();
+  const id='g'+Date.now();
+  guests[id]={id,name,note,total:0,items:[],openedAt:ts()};
+  closeModal('new-guest-modal');
+  selectedGuest=id;
+  renderGuestPills();renderGrid();renderCart();updateMetrics();
+}
+
+function selectGuest(id){selectedGuest=id;cart=[];renderGuestPills();renderGrid();renderCart();}
+
+function renderGuestPills(){
+  const keys=Object.keys(guests);
+  const el=document.getElementById('guest-pills');
+  if(!keys.length){el.innerHTML='<p class="empty">No open tabs — create a guest first.</p>';return;}
+  el.innerHTML=keys.map(k=>{
+    const g=guests[k];
+    return `<span class="guest-pill${k===selectedGuest?' selected':''}" onclick="selectGuest('${k}')">
+      <span>${g.name}</span><span class="amt">${fmt(g.total)}</span>
+    </span>`;
+  }).join('');
+}
+
+function renderGrid(){
+  const noGuest=!selectedGuest||!guests[selectedGuest];
+  document.getElementById('item-grid').innerHTML=cats.map(c=>{
+    const items=menu.filter(m=>m.cat===c.key);
+    if(!items.length)return '';
+    return `<div class="cat-label">${c.label}</div>`
+      +items.map(i=>`<button class="item-btn${i.cat==='happy'?' happy':''}${noGuest?' disabled':''}"
+        onclick="${noGuest?'openModal(\'new-guest-modal\')':'addToCart('+i.id+')'}">
+        <div class="name">${i.name}</div><div class="price">${fmt(i.price)}</div>
+        ${i.note?`<div class="note">${i.note}</div>`:''}
+      </button>`).join('');
+  }).join('');
+}
+
+function addToCart(id){
+  if(!selectedGuest||!guests[selectedGuest]){openModal('new-guest-modal');return;}
+  const item=menu.find(m=>m.id===id);if(!item)return;
+  const ex=cart.find(c=>c.id===id);
+  if(ex)ex.qty++;else cart.push({id,name:item.name,price:item.price,qty:1});
+  renderCart();
+}
+
+function addCustom(){
+  if(!selectedGuest||!guests[selectedGuest]){openModal('new-guest-modal');return;}
+  const name=document.getElementById('custom-name').value.trim();
+  const price=parseFloat(document.getElementById('custom-price').value);
+  if(!name||isNaN(price)||price<=0)return;
+  cart.push({id:'c'+Date.now(),name,price,qty:1});
+  document.getElementById('custom-name').value='';
+  document.getElementById('custom-price').value='';
+  renderCart();
+}
+
+function changeQty(id,delta){
+  const i=cart.findIndex(c=>c.id==id);if(i<0)return;
+  cart[i].qty+=delta;if(cart[i].qty<=0)cart.splice(i,1);
+  renderCart();
+}
+
+function clearCart(){cart=[];renderCart();}
+
+function renderCart(){
+  const total=cart.reduce((s,c)=>s+c.price*c.qty,0);
+  const g=selectedGuest&&guests[selectedGuest];
+  document.getElementById('cart-card').style.display=(cart.length&&g)?'block':'none';
+  if(!g)return;
+  document.getElementById('cart-guest-name').textContent=g.name;
+  document.getElementById('cart-items').innerHTML=cart.map(c=>`
+    <div class="cart-row">
+      <span>${c.name}</span>
+      <div class="qty-ctrl">
+        <button onclick="changeQty('${c.id}',-1)">−</button>
+        <span style="min-width:18px;text-align:center;font-size:13px">${c.qty}</span>
+        <button onclick="changeQty('${c.id}',1)">+</button>
+      </div>
+      <span style="color:#888">${fmt(c.price*c.qty)}</span>
+    </div>`).join('');
+  document.getElementById('cart-total').textContent=fmt(total);
+}
+
+function addToTab(){
+  if(!cart.length||!selectedGuest||!guests[selectedGuest])return;
+  const g=guests[selectedGuest];
+  const total=cart.reduce((s,c)=>s+c.price*c.qty,0);
+  const desc=cart.map(c=>`${c.qty}x ${c.name}`).join(', ');
+  const tx={id:++nextId,desc,amount:total,guest:g.name,time:ts(),method:'tab',status:'tab'};
+  g.total+=total;g.items.push(tx);transactions.unshift(tx);
+  cart=[];renderCart();renderGuestPills();updateMetrics();
+  const btn=document.getElementById('add-tab-btn');
+  btn.textContent='Added!';btn.disabled=true;
+  setTimeout(()=>{btn.textContent='Add to tab';btn.disabled=false;},1400);
+}
+
+function openStripeModal(guestId,total,desc,closeTab){
+  const g=guests[guestId];if(!g)return;
+  document.getElementById('stripe-modal-title').textContent='Collect payment — '+g.name;
+  document.getElementById('stripe-guest-label').textContent=g.name+(g.note?' · '+g.note:'');
+  document.getElementById('stripe-amount').textContent=fmt(total);
+  document.getElementById('stripe-desc-label').textContent=desc;
+  document.getElementById('stripe-open-link').href=stripeLink;
+  document.getElementById('stripe-url-display').textContent=stripeLink;
+  pendingPayment={guestId,total,desc,closeTab:!!closeTab};
+  openModal('stripe-modal');
+}
+
+function confirmStripePayment(){
+  if(!pendingPayment)return;
+  const g=guests[pendingPayment.guestId];if(!g)return;
+  const tx={id:++nextId,desc:pendingPayment.desc,amount:pendingPayment.total,guest:g.name,time:ts(),method:'stripe',status:'paid'};
+  transactions.unshift(tx);
+  if(pendingPayment.closeTab){
+    delete guests[pendingPayment.guestId];
+    if(selectedGuest===pendingPayment.guestId)selectedGuest=null;
+  }
+  cart=[];pendingPayment=null;
+  closeModal('stripe-modal');renderCart();renderGuestPills();renderGrid();updateMetrics();renderTabsFull();
+}
+
+function initCashPayment(){
+  if(!cart.length||!selectedGuest||!guests[selectedGuest])return;
+  const total=cart.reduce((s,c)=>s+c.price*c.qty,0);
+  const g=guests[selectedGuest];
+  document.getElementById('cash-guest-name').textContent=g.name;
+  document.getElementById('cash-amount-display').value=fmt(total);
+  pendingPayment={guestId:selectedGuest,total,desc:cart.map(c=>`${c.qty}x ${c.name}`).join(', '),closeTab:false};
+  openModal('cash-modal');
+}
+
+function calcChange(){
+  const due=pendingPayment?pendingPayment.total:0;
+  const received=parseFloat(document.getElementById('cash-received').value)||0;
+  document.getElementById('cash-change').textContent=fmt(Math.max(0,received-due));
+}
+
+function confirmCash(){
+  if(!pendingPayment)return;
+  const g=guests[pendingPayment.guestId];if(!g)return;
+  const tx={id:++nextId,desc:pendingPayment.desc,amount:pendingPayment.total,guest:g.name,time:ts(),method:'cash',status:'paid'};
+  transactions.unshift(tx);
+  if(pendingPayment.closeTab){
+    delete guests[pendingPayment.guestId];
+    if(selectedGuest===pendingPayment.guestId)selectedGuest=null;
+  }
+  cart=[];pendingPayment=null;
+  closeModal('cash-modal');renderCart();renderGuestPills();renderGrid();updateMetrics();renderTabsFull();
+}
+
+function closeGuestTabWithPayment(id,method){
+  const g=guests[id];if(!g)return;
+  if(method==='stripe'){
+    openStripeModal(id,g.total,'Tab: '+g.items.map(i=>i.desc).join(', '),true);
+  } else {
+    document.getElementById('cash-guest-name').textContent=g.name;
+    document.getElementById('cash-amount-display').value=fmt(g.total);
+    document.getElementById('cash-received').value='';
+    document.getElementById('cash-change').textContent='$0.00';
+    pendingPayment={guestId:id,total:g.total,desc:'Tab closed: '+g.name,closeTab:true};
+    openModal('cash-modal');
+  }
+}
+
+function updateMetrics(){
+  const paid=transactions.filter(t=>t.status==='paid');
+  document.getElementById('m-revenue').textContent=fmt(paid.reduce((s,t)=>s+t.amount,0));
+  document.getElementById('m-count').textContent=paid.length;
+  document.getElementById('m-tabs').textContent=Object.keys(guests).length;
+}
+
+function renderTabsFull(){
+  const keys=Object.keys(guests);
+  const el=document.getElementById('tabs-full');
+  if(!keys.length){el.innerHTML='<div class="card"><p class="empty">No open tabs.</p></div>';return;}
+  el.innerHTML=keys.map(k=>{
+    const g=guests[k];
+    return `<div class="tab-card">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+        <div class="avatar">${initials(g.name)}</div>
+        <div style="flex:1">
+          <p style="font-size:14px;font-weight:500">${g.name}</p>
+          <p style="font-size:12px;color:#aaa">${g.note?g.note+' · ':''}Opened ${g.openedAt}</p>
+        </div>
+        <span style="font-size:17px;font-weight:500">${fmt(g.total)}</span>
+      </div>
+      <div style="border-top:1px solid #f0ede8;padding-top:8px;margin-bottom:12px">
+        ${g.items.length
+          ?g.items.map(i=>`<div style="font-size:12px;color:#aaa;padding:2px 0">${i.time} — ${i.desc} — ${fmt(i.amount)}</div>`).join('')
+          :'<p class="empty" style="font-size:12px">No items yet.</p>'}
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="action-btn" style="flex:1;text-align:center" onclick="selectGuest('${k}');showTab('charge')">Add drinks</button>
+        <button class="btn-blue" style="flex:1;padding:9px;font-size:13px" onclick="closeGuestTabWithPayment('${k}','stripe')">Link · ${fmt(g.total)}</button>
+        <button class="btn-green" style="flex:1;padding:9px;font-size:13px" onclick="closeGuestTabWithPayment('${k}','cash')">Cash · ${fmt(g.total)}</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderTx(){
+  if(!transactions.length){document.getElementById('tx-list').innerHTML='<p class="empty" style="padding-top:8px">No transactions yet.</p>';return;}
+  document.getElementById('tx-list').innerHTML=transactions.map(t=>{
+    const badge=t.method==='cash'?'badge-cash':t.method==='stripe'?'badge-stripe':'badge-tab';
+    const label=t.method==='cash'?'Cash':t.method==='stripe'?'Link':'Tab';
+    return `<div class="tx-row">
+      <span>${t.desc}</span>
+      <span style="color:#aaa;font-size:12px">${t.guest}</span>
+      <span style="color:#aaa;font-size:12px">${t.time}</span>
+      <span><span class="badge ${badge}">${label}</span></span>
+      <span style="text-align:right;font-weight:500">${fmt(t.amount)}</span>
+    </div>`;
+  }).join('');
+}
+
+function saveSettings(){
+  stripeLink=document.getElementById('stripe-link').value.trim();
+  const st=document.getElementById('settings-status');
+  st.textContent='Saved!';setTimeout(()=>st.textContent='',2000);
+}
+
+renderGrid();
+renderGuestPills();
+</script>
+</body>
+</html>
