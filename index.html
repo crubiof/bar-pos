@@ -6,116 +6,128 @@
 <title>Bar POS</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f5f3;color:#1a1a18;min-height:100vh}
+:root{
+  --bg:        #0f0e0c;
+  --bg2:       #1a1814;
+  --bg3:       #242018;
+  --border:    #2e2a22;
+  --border2:   #3d3830;
+  --text:      #f0ead8;
+  --text2:     #8c8068;
+  --text3:     #5a5040;
+  --amber:     #e8a020;
+  --amber-dim: #3d2e08;
+  --amber-mid: #7a5510;
+  --green:     #3a7d44;
+  --green-bg:  #0f2012;
+  --green-txt: #5cba6e;
+  --blue:      #2060a8;
+  --blue-bg:   #0a1828;
+  --blue-txt:  #5090d8;
+  --red:       #a83020;
+  --red-bg:    #280c08;
+  --red-txt:   #d06050;
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
 
-/* ── TOP BAR ── */
-.topbar{display:flex;align-items:center;justify-content:space-between;padding:.75rem 1.5rem;background:#fff;border-bottom:1px solid #e8e6e0;position:sticky;top:0;z-index:50}
-.topbar h1{font-size:16px;font-weight:500}
-.topbar-metrics{display:flex;gap:1.5rem}
-.topbar-metric{text-align:right}
-.topbar-metric .lbl{font-size:11px;color:#888}
-.topbar-metric .val{font-size:15px;font-weight:500}
-.nav-tabs{display:flex;gap:4px;padding:.75rem 1.5rem;background:#fff;border-bottom:1px solid #e8e6e0}
-.nav-tabs button{padding:6px 16px;font-size:13px;border-radius:8px;border:1px solid #ddd;background:transparent;color:#666;cursor:pointer;transition:all .15s}
-.nav-tabs button.active{background:#1a1a18;color:#fff;border-color:#1a1a18;font-weight:500}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:.75rem 1.5rem;background:var(--bg2);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:50}
+.topbar h1{font-size:16px;font-weight:500;color:var(--amber);letter-spacing:.02em}
+.topbar-metrics{display:flex;gap:2rem}
+.topbar-metric .lbl{font-size:11px;color:var(--text2);margin-bottom:2px}
+.topbar-metric .val{font-size:16px;font-weight:500;color:var(--text)}
 
-/* ── LAYOUT ── */
-.page{display:none;height:calc(100vh - 97px)}.page.active{display:flex}
+.nav-tabs{display:flex;gap:4px;padding:.6rem 1.5rem;background:var(--bg2);border-bottom:1px solid var(--border)}
+.nav-tabs button{padding:6px 16px;font-size:13px;border-radius:6px;border:1px solid transparent;background:transparent;color:var(--text2);cursor:pointer;transition:all .15s}
+.nav-tabs button:hover{color:var(--text);background:var(--bg3)}
+.nav-tabs button.active{background:var(--amber-dim);color:var(--amber);border-color:var(--amber-mid);font-weight:500}
 
-/* CHARGE page — two column on large */
-.charge-left{flex:1;overflow-y:auto;padding:1.25rem;border-right:1px solid #e8e6e0;min-width:0}
-.charge-right{width:340px;flex-shrink:0;overflow-y:auto;padding:1.25rem;background:#fafaf8}
+.page{display:none;height:calc(100vh - 94px)}.page.active{display:flex}
+.page-single{display:none;overflow-y:auto;padding:1.5rem;width:100%}.page-single.active{display:block}
 
-/* single column pages */
-.page-single{display:none;overflow-y:auto;padding:1.5rem;width:100%}
-.page-single.active{display:block}
+.charge-left{flex:1;overflow-y:auto;padding:1.25rem;border-right:1px solid var(--border);min-width:0}
+.charge-right{width:340px;flex-shrink:0;overflow-y:auto;padding:1.25rem;background:var(--bg2)}
 
-/* ── CARDS ── */
-.card{background:#fff;border:1px solid #e8e6e0;border-radius:12px;padding:1.25rem;margin-bottom:1rem}
-.card-title{font-size:11px;font-weight:600;color:#888;letter-spacing:.05em;text-transform:uppercase;margin-bottom:10px}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:1.25rem;margin-bottom:1rem}
+.card-title{font-size:10px;font-weight:600;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px}
 
-/* ── ITEM GRID ── */
-.cat-label{font-size:11px;font-weight:600;color:#888;letter-spacing:.06em;text-transform:uppercase;grid-column:1/-1;margin-top:10px;margin-bottom:4px}
+.cat-label{font-size:10px;font-weight:600;color:var(--text3);letter-spacing:.07em;text-transform:uppercase;grid-column:1/-1;margin-top:10px;margin-bottom:4px}
 .item-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px}
-.item-btn{padding:10px 8px;border-radius:8px;border:1px solid #ddd;background:#fff;cursor:pointer;text-align:center;transition:all .12s;user-select:none}
-.item-btn:hover{background:#f5f5f3;border-color:#aaa;transform:translateY(-1px)}
-.item-btn:active{transform:translateY(0)}
-.item-btn .name{font-size:12px;font-weight:500;color:#1a1a18;margin-bottom:2px;line-height:1.3}
-.item-btn .price{font-size:12px;color:#666}
-.item-btn .note{font-size:10px;color:#bbb;margin-top:2px;line-height:1.2}
-.item-btn.happy{border-color:#854F0B;background:#FAEEDA}
-.item-btn.happy .name{color:#412402}.item-btn.happy .price{color:#633806}
-.item-btn.disabled{opacity:.3;cursor:not-allowed;transform:none}
+.item-btn{padding:11px 8px;border-radius:8px;border:1px solid var(--border2);background:var(--bg3);cursor:pointer;text-align:center;transition:all .12s;user-select:none}
+.item-btn:hover{border-color:var(--amber-mid);background:#2a2418}
+.item-btn:active{transform:scale(.97)}
+.item-btn .name{font-size:12px;font-weight:500;color:var(--text);margin-bottom:3px;line-height:1.3}
+.item-btn .price{font-size:13px;color:var(--amber);font-weight:500}
+.item-btn .note{font-size:10px;color:var(--text3);margin-top:3px;line-height:1.2}
+.item-btn.happy{border-color:var(--amber-mid);background:var(--amber-dim)}
+.item-btn.happy .name{color:var(--amber)}
+.item-btn.happy .price{color:#ffc040}
+.item-btn.disabled{opacity:.25;cursor:not-allowed}
 
-/* ── GUEST PILLS ── */
-.guest-pill{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:20px;font-size:13px;font-weight:500;background:#E6F1FB;color:#185FA5;cursor:pointer;border:1px solid #B5D4F4;transition:all .12s;margin:3px}
-.guest-pill:hover{opacity:.8}
-.guest-pill.selected{background:#185FA5;color:#fff;border-color:#185FA5}
-.guest-pill .amt{font-size:11px;font-weight:400;opacity:.8;margin-left:2px}
+.guest-pill{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:20px;font-size:13px;font-weight:500;background:var(--bg3);color:var(--text2);cursor:pointer;border:1px solid var(--border2);transition:all .12s;margin:3px}
+.guest-pill:hover{border-color:var(--amber-mid);color:var(--text)}
+.guest-pill.selected{background:var(--amber-dim);color:var(--amber);border-color:var(--amber-mid)}
+.guest-pill .amt{font-size:11px;font-weight:400;opacity:.7;margin-left:2px}
 
-/* ── CART ── */
-.cart-row{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f0ede8;font-size:13px}
+.cart-row{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border);font-size:13px;color:var(--text)}
 .cart-row:last-child{border-bottom:none}
 .qty-ctrl{display:flex;align-items:center;gap:6px}
-.qty-ctrl button{width:26px;height:26px;border-radius:50%;border:1px solid #ddd;background:#fff;cursor:pointer;font-size:16px;line-height:1;color:#1a1a18}
-.qty-ctrl button:hover{background:#f5f5f3}
+.qty-ctrl button{width:26px;height:26px;border-radius:50%;border:1px solid var(--border2);background:var(--bg3);cursor:pointer;font-size:16px;line-height:1;color:var(--text)}
+.qty-ctrl button:hover{border-color:var(--amber-mid);color:var(--amber)}
 
-/* ── INPUTS ── */
-input,select{width:100%;padding:9px 11px;font-size:13px;border:1px solid #ddd;border-radius:8px;background:#fff;color:#1a1a18;outline:none;transition:border-color .15s}
-input:focus,select:focus{border-color:#888}
-input[readonly]{background:#f5f5f3;color:#555}
+input,select{width:100%;padding:9px 11px;font-size:13px;border:1px solid var(--border2);border-radius:8px;background:var(--bg3);color:var(--text);outline:none;transition:border-color .15s}
+input:focus,select:focus{border-color:var(--amber-mid)}
+input[readonly]{background:var(--bg);color:var(--text2)}
+input::placeholder{color:var(--text3)}
 
-/* ── BUTTONS ── */
-.btn-primary{width:100%;padding:13px;font-size:14px;font-weight:500;border-radius:8px;border:none;background:#1a1a18;color:#fff;cursor:pointer;transition:opacity .15s}
-.btn-primary:hover{opacity:.85}
-.btn-primary:disabled{opacity:.35;cursor:not-allowed}
-.btn-blue{width:100%;padding:13px;font-size:14px;font-weight:500;border-radius:8px;border:none;background:#185FA5;color:#fff;cursor:pointer;transition:opacity .15s}
-.btn-blue:hover{opacity:.88}
-.btn-blue:disabled{opacity:.35;cursor:not-allowed}
-.btn-green{width:100%;padding:13px;font-size:14px;font-weight:500;border-radius:8px;border:1px solid #a8e6c3;background:#f0faf5;color:#27ae60;cursor:pointer;transition:opacity .15s}
+.btn-amber{width:100%;padding:13px;font-size:14px;font-weight:500;border-radius:8px;border:1px solid var(--amber-mid);background:var(--amber-dim);color:var(--amber);cursor:pointer;transition:all .15s}
+.btn-amber:hover{background:#4a3810;border-color:var(--amber)}
+.btn-amber:disabled{opacity:.3;cursor:not-allowed}
+
+.btn-green{width:100%;padding:13px;font-size:14px;font-weight:500;border-radius:8px;border:1px solid var(--green);background:var(--green-bg);color:var(--green-txt);cursor:pointer;transition:all .15s}
 .btn-green:hover{opacity:.85}
-.action-btn{padding:8px 14px;font-size:13px;border-radius:8px;border:1px solid #ddd;background:#fff;cursor:pointer;color:#1a1a18;white-space:nowrap;transition:all .12s}
-.action-btn:hover{background:#f5f5f3}
-.danger-btn{color:#c0392b;border-color:#f5c6c6}
-.danger-btn:hover{background:#fff5f5}
 
-/* ── BADGES ── */
+.btn-blue{width:100%;padding:13px;font-size:14px;font-weight:500;border-radius:8px;border:1px solid var(--blue);background:var(--blue-bg);color:var(--blue-txt);cursor:pointer;transition:all .15s}
+.btn-blue:hover{opacity:.85}
+.btn-blue:disabled{opacity:.3;cursor:not-allowed}
+
+.action-btn{padding:8px 14px;font-size:13px;border-radius:8px;border:1px solid var(--border2);background:transparent;cursor:pointer;color:var(--text2);white-space:nowrap;transition:all .12s}
+.action-btn:hover{background:var(--bg3);color:var(--text)}
+.danger-btn{color:var(--red-txt);border-color:var(--red)}
+.danger-btn:hover{background:var(--red-bg)}
+
 .badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:20px;font-weight:500}
-.badge-cash{background:#FEF3C7;color:#92400E}
-.badge-stripe{background:#DBEAFE;color:#1E40AF}
-.badge-tab{background:#F3F4F6;color:#6B7280}
+.badge-cash{background:#2a1e00;color:#d4900a}
+.badge-stripe{background:var(--blue-bg);color:var(--blue-txt)}
+.badge-tab{background:var(--bg3);color:var(--text2)}
 
-/* ── TX TABLE ── */
-.tx-grid{display:grid;grid-template-columns:1fr 100px 60px 60px 80px;gap:8px;align-items:center;padding:9px 0;border-bottom:1px solid #f0ede8;font-size:13px}
+.tx-grid{display:grid;grid-template-columns:1fr 100px 60px 60px 80px;gap:8px;align-items:center;padding:9px 0;border-bottom:1px solid var(--border);font-size:13px}
 .tx-grid:last-child{border-bottom:none}
-.tx-head{font-size:11px;color:#888;font-weight:600}
+.tx-head{font-size:10px;color:var(--text3);font-weight:600;letter-spacing:.04em;text-transform:uppercase}
 
-/* ── AVATAR ── */
-.avatar{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500;background:#E6F1FB;color:#185FA5;flex-shrink:0}
+.avatar{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500;background:var(--amber-dim);color:var(--amber);flex-shrink:0;border:1px solid var(--amber-mid)}
 
-/* ── MODALS ── */
-.modal-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.5);z-index:200;align-items:center;justify-content:center}
+.modal-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.75);z-index:200;align-items:center;justify-content:center}
 .modal-overlay.open{display:flex}
-.modal{background:#fff;border-radius:12px;border:1px solid #e8e6e0;padding:1.5rem;width:360px;box-shadow:0 8px 32px rgba(0,0,0,.14)}
-.modal h3{font-size:15px;font-weight:500;margin-bottom:1.25rem}
+.modal{background:var(--bg2);border-radius:12px;border:1px solid var(--border2);padding:1.5rem;width:360px;box-shadow:0 8px 40px rgba(0,0,0,.5)}
+.modal h3{font-size:15px;font-weight:500;color:var(--text);margin-bottom:1.25rem}
 .field{margin-bottom:12px}
-.field label{font-size:12px;color:#888;display:block;margin-bottom:4px}
-.amount-big{font-size:48px;font-weight:500;color:#1a1a18;text-align:center;padding:1rem 0;line-height:1}
-.link-box{display:block;width:100%;padding:13px;border-radius:8px;border:1px solid #B5D4F4;background:#E6F1FB;color:#185FA5;font-size:13px;font-weight:500;text-align:center;text-decoration:none;margin-bottom:8px}
-.link-box:hover{opacity:.85}
+.field label{font-size:12px;color:var(--text2);display:block;margin-bottom:4px}
+.amount-big{font-size:52px;font-weight:500;color:var(--amber);text-align:center;padding:1rem 0;line-height:1}
+.link-box{display:block;width:100%;padding:13px;border-radius:8px;border:1px solid var(--blue);background:var(--blue-bg);color:var(--blue-txt);font-size:13px;font-weight:500;text-align:center;text-decoration:none;margin-bottom:8px;transition:opacity .15s}
+.link-box:hover{opacity:.8}
 .step{display:flex;gap:10px;margin-bottom:10px;align-items:flex-start}
-.step-n{width:22px;height:22px;border-radius:50%;background:#f5f5f3;color:#888;font-size:12px;font-weight:500;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
-.step-t{font-size:13px;color:#666;line-height:1.5}
-.step-t strong{color:#1a1a18;font-weight:500}
-.empty{font-size:13px;color:#bbb;padding:4px 0}
+.step-n{width:22px;height:22px;border-radius:50%;background:var(--bg3);color:var(--text2);font-size:12px;font-weight:500;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;border:1px solid var(--border2)}
+.step-t{font-size:13px;color:var(--text2);line-height:1.5}
+.step-t strong{color:var(--text);font-weight:500}
+.empty{font-size:13px;color:var(--text3);padding:4px 0}
+.divider{border-top:1px solid var(--border);margin:12px 0}
 
-/* ── RESPONSIVE ── */
 @media(max-width:768px){
   .topbar-metrics{display:none}
-  .charge-right{width:100%;border-right:none;border-top:1px solid #e8e6e0}
+  .charge-right{width:100%;border-right:none;border-top:1px solid var(--border)}
   .page{flex-direction:column;height:auto}
   .charge-left,.charge-right{overflow-y:visible;height:auto}
-  .tx-grid{grid-template-columns:1fr 60px 60px 70px}
+  .tx-grid{grid-template-columns:1fr 55px 60px 70px}
   .tx-grid .g-col{display:none}
 }
 @media(min-width:769px) and (max-width:1100px){
@@ -125,13 +137,11 @@ input[readonly]{background:#f5f5f3;color:#555}
 @media(min-width:1100px){
   .item-grid{grid-template-columns:repeat(auto-fill,minmax(130px,1fr))}
   .charge-right{width:380px}
-  .modal{width:400px}
 }
 </style>
 </head>
 <body>
 
-<!-- TOP BAR -->
 <div class="topbar">
   <h1>Bar POS</h1>
   <div class="topbar-metrics">
@@ -139,10 +149,9 @@ input[readonly]{background:#f5f5f3;color:#555}
     <div class="topbar-metric"><div class="lbl">Charges</div><div class="val" id="m-count">0</div></div>
     <div class="topbar-metric"><div class="lbl">Open tabs</div><div class="val" id="m-tabs">0</div></div>
   </div>
-  <button class="action-btn" onclick="openModal('new-guest-modal')" style="font-size:13px;padding:7px 14px">+ New guest</button>
+  <button class="btn-amber" onclick="openModal('new-guest-modal')" style="width:auto;padding:7px 16px;font-size:13px">+ New guest</button>
 </div>
 
-<!-- NAV -->
 <div class="nav-tabs">
   <button class="active" onclick="showPage('charge')">Charge</button>
   <button onclick="showPage('tabs')">Open tabs</button>
@@ -150,12 +159,9 @@ input[readonly]{background:#f5f5f3;color:#555}
   <button onclick="showPage('settings')">Settings</button>
 </div>
 
-<!-- ── CHARGE PAGE ── -->
+<!-- CHARGE -->
 <div id="charge" class="page active">
-
-  <!-- LEFT: guests + menu -->
   <div class="charge-left">
-
     <div class="card">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
         <p class="card-title" style="margin:0">Charging to</p>
@@ -163,49 +169,47 @@ input[readonly]{background:#f5f5f3;color:#555}
       </div>
       <div id="guest-pills"><p class="empty">No open tabs — create a guest first.</p></div>
     </div>
-
     <div class="card">
       <p class="card-title">Menu</p>
       <div class="item-grid" id="item-grid"></div>
-      <div style="margin-top:14px;border-top:1px solid #f0ede8;padding-top:12px;display:flex;gap:8px;align-items:center">
+      <div style="margin-top:14px;border-top:1px solid var(--border);padding-top:12px;display:flex;gap:8px;align-items:center">
         <input id="custom-name" placeholder="Custom item" style="flex:2">
         <input id="custom-price" placeholder="$0.00" type="number" min="0" step="0.01" style="flex:1;max-width:100px">
         <button class="action-btn" onclick="addCustom()">+ Add</button>
       </div>
     </div>
-
   </div>
 
-  <!-- RIGHT: cart -->
   <div class="charge-right">
-    <div id="no-guest-msg" style="text-align:center;padding:3rem 1rem;color:#bbb;font-size:13px">
-      <p style="font-size:32px;margin-bottom:8px">☝</p>
+    <div id="no-guest-msg" style="text-align:center;padding:4rem 1rem;color:var(--text3);font-size:13px">
+      <div style="font-size:36px;margin-bottom:10px;opacity:.4">↑</div>
       <p>Select or create a guest<br>to start an order</p>
     </div>
     <div id="cart-panel" style="display:none">
       <div class="card">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
-          <p class="card-title" style="margin:0">Order — <span id="cart-guest-name" style="color:#1a1a18;text-transform:none;letter-spacing:0;font-size:12px"></span></p>
+          <p class="card-title" style="margin:0">Order — <span id="cart-guest-name" style="color:var(--amber);text-transform:none;letter-spacing:0;font-size:12px"></span></p>
           <button class="action-btn danger-btn" style="font-size:12px;padding:4px 8px" onclick="clearCart()">Clear</button>
         </div>
-        <div id="cart-items"><p class="empty">No items yet — tap menu items.</p></div>
-        <div style="display:flex;justify-content:space-between;align-items:center;padding-top:12px;border-top:1px solid #e8e6e0;margin-top:8px">
-          <span style="font-size:13px;color:#888">Total</span>
-          <span style="font-size:22px;font-weight:500" id="cart-total">$0.00</span>
+        <div id="cart-items"><p class="empty">Tap menu items to add.</p></div>
+        <div class="divider"></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+          <span style="font-size:13px;color:var(--text2)">Total</span>
+          <span style="font-size:24px;font-weight:500;color:var(--amber)" id="cart-total">$0.00</span>
         </div>
-        <div style="display:flex;gap:8px;margin-top:12px">
-          <button class="btn-primary" id="add-tab-btn" onclick="addToTab()" style="flex:1">Add to tab</button>
+        <div style="display:flex;gap:8px">
+          <button class="btn-amber" id="add-tab-btn" onclick="addToTab()" style="flex:1">Add to tab</button>
           <button class="btn-green" onclick="initCashPayment()" style="flex:1">Cash</button>
         </div>
       </div>
 
-      <div class="card" id="tab-summary-card">
+      <div class="card" id="tab-summary-card" style="display:none">
         <p class="card-title">Tab running total</p>
-        <div style="display:flex;justify-content:space-between;align-items:center">
-          <span style="font-size:13px;color:#888">Total on tab</span>
-          <span style="font-size:18px;font-weight:500" id="tab-running-total">$0.00</span>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+          <span style="font-size:13px;color:var(--text2)">On tab</span>
+          <span style="font-size:20px;font-weight:500;color:var(--text)" id="tab-running-total">$0.00</span>
         </div>
-        <div style="margin-top:12px;display:flex;gap:8px">
+        <div style="display:flex;gap:8px">
           <button class="btn-blue" onclick="closeCurrentTab('stripe')" style="flex:1;padding:10px;font-size:13px">Pay via link</button>
           <button class="btn-green" onclick="closeCurrentTab('cash')" style="flex:1;padding:10px;font-size:13px">Pay cash</button>
         </div>
@@ -214,67 +218,67 @@ input[readonly]{background:#f5f5f3;color:#555}
   </div>
 </div>
 
-<!-- ── TABS PAGE ── -->
+<!-- TABS -->
 <div id="tabs" class="page-single">
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
-    <p style="font-size:16px;font-weight:500">Open tabs</p>
-    <button class="action-btn" onclick="openModal('new-guest-modal')">+ New guest</button>
+    <p style="font-size:16px;font-weight:500;color:var(--text)">Open tabs</p>
+    <button class="btn-amber" onclick="openModal('new-guest-modal')" style="width:auto;padding:7px 14px;font-size:13px">+ New guest</button>
   </div>
   <div id="tabs-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px">
     <div class="card"><p class="empty">No open tabs.</p></div>
   </div>
 </div>
 
-<!-- ── TRANSACTIONS PAGE ── -->
+<!-- TRANSACTIONS -->
 <div id="transactions" class="page-single">
-  <p style="font-size:16px;font-weight:500;margin-bottom:1rem">Transaction history</p>
+  <p style="font-size:16px;font-weight:500;margin-bottom:1rem;color:var(--text)">Transaction history</p>
   <div class="card">
-    <div class="tx-grid tx-head" style="border-bottom:1px solid #e8e6e0;padding-bottom:8px;margin-bottom:2px">
+    <div class="tx-grid tx-head" style="border-bottom:1px solid var(--border);padding-bottom:8px;margin-bottom:2px">
       <span>Description</span><span class="g-col">Guest</span><span>Time</span><span>Method</span><span style="text-align:right">Amount</span>
     </div>
     <div id="tx-list"><p class="empty" style="padding-top:8px">No transactions yet.</p></div>
   </div>
 </div>
 
-<!-- ── SETTINGS PAGE ── -->
+<!-- SETTINGS -->
 <div id="settings" class="page-single">
-  <p style="font-size:16px;font-weight:500;margin-bottom:1rem">Settings</p>
+  <p style="font-size:16px;font-weight:500;margin-bottom:1rem;color:var(--text)">Settings</p>
   <div class="card" style="max-width:520px">
     <p class="card-title">Stripe payment link</p>
-    <p style="font-size:13px;color:#888;margin-bottom:12px;line-height:1.6">Guests open this link on their phone and enter the amount you tell them.</p>
+    <p style="font-size:13px;color:var(--text2);margin-bottom:12px;line-height:1.6">Guests open this link and enter the amount you tell them.</p>
     <div class="field"><label>Payment link URL</label><input id="stripe-link" value="https://buy.stripe.com/14A00k3QJfwScun3Zle7m01"></div>
     <button class="action-btn" onclick="saveSettings()">Save</button>
-    <span id="settings-status" style="font-size:12px;margin-left:8px;color:#27ae60"></span>
+    <span id="settings-status" style="font-size:12px;margin-left:8px;color:var(--green-txt)"></span>
   </div>
 </div>
 
-<!-- ── NEW GUEST MODAL ── -->
+<!-- NEW GUEST MODAL -->
 <div class="modal-overlay" id="new-guest-modal" onclick="handleOverlay(event,'new-guest-modal')">
   <div class="modal">
     <h3>Open tab for guest</h3>
     <div class="field"><label>Guest name *</label><input id="ng-name" placeholder="e.g. Maria, Table 4..." onkeydown="if(event.key==='Enter')createGuest()"></div>
-    <div class="field"><label>Note (optional)</label><input id="ng-note" placeholder="e.g. Table 7, VIP, birthday..."></div>
+    <div class="field"><label>Note (optional)</label><input id="ng-note" placeholder="e.g. Table 7, VIP..."></div>
     <div style="display:flex;gap:8px;margin-top:16px">
-      <button class="btn-primary" onclick="createGuest()" style="flex:1">Open tab</button>
+      <button class="btn-amber" onclick="createGuest()" style="flex:1">Open tab</button>
       <button class="action-btn" onclick="closeModal('new-guest-modal')" style="flex:1;text-align:center">Cancel</button>
     </div>
   </div>
 </div>
 
-<!-- ── STRIPE PAYMENT MODAL ── -->
+<!-- STRIPE PAYMENT MODAL -->
 <div class="modal-overlay" id="stripe-modal" onclick="handleOverlay(event,'stripe-modal')">
   <div class="modal">
     <h3 id="stripe-modal-title">Collect payment</h3>
-    <div style="border-radius:8px;background:#f5f5f3;padding:.75rem 1rem;margin-bottom:16px;text-align:center">
-      <p style="font-size:11px;color:#888;margin-bottom:2px" id="stripe-guest-label"></p>
+    <div style="border-radius:8px;background:var(--bg3);border:1px solid var(--border2);padding:.75rem 1rem;margin-bottom:16px;text-align:center">
+      <p style="font-size:11px;color:var(--text2);margin-bottom:2px" id="stripe-guest-label"></p>
       <div class="amount-big" id="stripe-amount">$0.00</div>
-      <p style="font-size:12px;color:#aaa;margin-top:4px" id="stripe-desc-label"></p>
+      <p style="font-size:12px;color:var(--text3);margin-top:4px" id="stripe-desc-label"></p>
     </div>
     <div class="step"><div class="step-n">1</div><div class="step-t"><strong>Tell the guest the amount</strong> shown above.</div></div>
     <div class="step"><div class="step-n">2</div><div class="step-t"><strong>Guest opens the link</strong> on their phone and enters that amount.</div></div>
     <div class="step" style="margin-bottom:16px"><div class="step-n">3</div><div class="step-t"><strong>Once they've paid</strong>, tap "Mark as paid".</div></div>
     <a id="stripe-open-link" href="#" target="_blank" class="link-box">Open payment link →</a>
-    <p style="font-size:11px;color:#ccc;text-align:center;margin-bottom:16px;word-break:break-all" id="stripe-url-display"></p>
+    <p style="font-size:11px;color:var(--text3);text-align:center;margin-bottom:16px;word-break:break-all" id="stripe-url-display"></p>
     <div style="display:flex;gap:8px">
       <button class="btn-blue" onclick="confirmStripePayment()" style="flex:1">Mark as paid</button>
       <button class="action-btn" onclick="closeModal('stripe-modal')" style="flex:1;text-align:center">Cancel</button>
@@ -282,16 +286,16 @@ input[readonly]{background:#f5f5f3;color:#555}
   </div>
 </div>
 
-<!-- ── CASH MODAL ── -->
+<!-- CASH MODAL -->
 <div class="modal-overlay" id="cash-modal" onclick="handleOverlay(event,'cash-modal')">
   <div class="modal">
     <h3>Cash payment</h3>
-    <p style="font-size:13px;color:#888;margin-bottom:16px">For <span id="cash-guest-name" style="font-weight:500;color:#1a1a18"></span></p>
-    <div class="field"><label>Amount due</label><input id="cash-amount-display" readonly style="font-size:18px;font-weight:500"></div>
+    <p style="font-size:13px;color:var(--text2);margin-bottom:16px">For <span id="cash-guest-name" style="font-weight:500;color:var(--text)"></span></p>
+    <div class="field"><label>Amount due</label><input id="cash-amount-display" readonly style="font-size:20px;font-weight:500;color:var(--amber)"></div>
     <div class="field"><label>Cash received</label><input id="cash-received" type="number" min="0" step="0.01" placeholder="0.00" oninput="calcChange()"></div>
-    <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-top:1px solid #e8e6e0;margin-bottom:16px">
-      <span style="font-size:13px;color:#888">Change</span>
-      <span style="font-size:24px;font-weight:500" id="cash-change">$0.00</span>
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-top:1px solid var(--border);margin-bottom:16px">
+      <span style="font-size:13px;color:var(--text2)">Change</span>
+      <span style="font-size:26px;font-weight:500;color:var(--green-txt)" id="cash-change">$0.00</span>
     </div>
     <div style="display:flex;gap:8px">
       <button class="btn-green" onclick="confirmCash()" style="flex:1">Confirm cash</button>
@@ -327,12 +331,21 @@ const cats=[
   {key:'shot',label:'Shots'},
 ];
 
-let guests={},cart=[],selectedGuest=null,transactions=[],nextId=300;
-let stripeLink='https://buy.stripe.com/14A00k3QJfwScun3Zle7m01';
-let pendingPayment=null;
+const STORE_KEY='barpos_v7';
+function loadState(){try{const r=localStorage.getItem(STORE_KEY);return r?JSON.parse(r):null;}catch(e){return null;}}
+function saveState(){try{localStorage.setItem(STORE_KEY,JSON.stringify({guests,transactions,nextId,stripeLink,selectedGuest}));}catch(e){}}
+
+const _s=loadState();
+let guests        = _s?.guests       || {};
+let transactions  = _s?.transactions || [];
+let nextId        = _s?.nextId       || 300;
+let stripeLink    = _s?.stripeLink   || 'https://buy.stripe.com/14A00k3QJfwScun3Zle7m01';
+let selectedGuest = (_s?.selectedGuest && _s?.guests?.[_s.selectedGuest]) ? _s.selectedGuest : null;
+let cart=[], pendingPayment=null;
 
 const fmt=n=>'$'+n.toFixed(2);
 const ts=()=>{const d=new Date();return d.getHours().toString().padStart(2,'0')+':'+d.getMinutes().toString().padStart(2,'0');};
+const today=()=>new Date().toDateString();
 const initials=n=>n.trim().split(/\s+/).map(w=>w[0].toUpperCase()).slice(0,2).join('');
 
 function showPage(t){
@@ -364,15 +377,11 @@ function createGuest(){
   const id='g'+Date.now();
   guests[id]={id,name,note,total:0,items:[],openedAt:ts()};
   closeModal('new-guest-modal');
-  selectedGuest=id;
-  cart=[];
-  renderGuestPills();renderGrid();renderCartPanel();updateMetrics();
+  selectedGuest=id;cart=[];
+  saveState();renderGuestPills();renderGrid();renderCartPanel();updateMetrics();
 }
 
-function selectGuest(id){
-  selectedGuest=id;cart=[];
-  renderGuestPills();renderGrid();renderCartPanel();
-}
+function selectGuest(id){selectedGuest=id;cart=[];renderGuestPills();renderGrid();renderCartPanel();}
 
 function renderGuestPills(){
   const keys=Object.keys(guests);
@@ -432,26 +441,21 @@ function renderCartPanel(){
   document.getElementById('no-guest-msg').style.display=g?'none':'block';
   document.getElementById('cart-panel').style.display=g?'block':'none';
   if(!g)return;
-
   document.getElementById('cart-guest-name').textContent=g.name;
   const total=cart.reduce((s,c)=>s+c.price*c.qty,0);
-
-  const cartEl=document.getElementById('cart-items');
-  cartEl.innerHTML=cart.length?cart.map(c=>`
+  document.getElementById('cart-items').innerHTML=cart.length?cart.map(c=>`
     <div class="cart-row">
       <span>${c.name}</span>
       <div class="qty-ctrl">
         <button onclick="changeQty('${c.id}',-1)">−</button>
-        <span style="min-width:18px;text-align:center;font-size:13px">${c.qty}</span>
+        <span style="min-width:18px;text-align:center;font-size:13px;color:var(--text)">${c.qty}</span>
         <button onclick="changeQty('${c.id}',1)">+</button>
       </div>
-      <span style="color:#888">${fmt(c.price*c.qty)}</span>
-    </div>`).join(''):'<p class="empty">No items yet — tap menu items.</p>';
-
+      <span style="color:var(--amber)">${fmt(c.price*c.qty)}</span>
+    </div>`).join(''):'<p class="empty">Tap menu items to add.</p>';
   document.getElementById('cart-total').textContent=fmt(total);
-
-  const tabSummary=document.getElementById('tab-summary-card');
-  tabSummary.style.display=g.total>0?'block':'none';
+  const ts_card=document.getElementById('tab-summary-card');
+  ts_card.style.display=g.total>0?'block':'none';
   document.getElementById('tab-running-total').textContent=fmt(g.total);
 }
 
@@ -460,9 +464,9 @@ function addToTab(){
   const g=guests[selectedGuest];
   const total=cart.reduce((s,c)=>s+c.price*c.qty,0);
   const desc=cart.map(c=>`${c.qty}x ${c.name}`).join(', ');
-  const tx={id:++nextId,desc,amount:total,guest:g.name,time:ts(),method:'tab',status:'tab'};
+  const tx={id:++nextId,desc,amount:total,guest:g.name,time:ts(),date:today(),method:'tab',status:'tab'};
   g.total+=total;g.items.push(tx);transactions.unshift(tx);
-  cart=[];renderCartPanel();renderGuestPills();updateMetrics();
+  cart=[];saveState();renderCartPanel();renderGuestPills();updateMetrics();
   const btn=document.getElementById('add-tab-btn');
   btn.textContent='Added!';btn.disabled=true;
   setTimeout(()=>{btn.textContent='Add to tab';btn.disabled=false;},1400);
@@ -488,14 +492,11 @@ function openStripeModal(guestId,total,desc,closeTab){
 function confirmStripePayment(){
   if(!pendingPayment)return;
   const g=guests[pendingPayment.guestId];if(!g)return;
-  const tx={id:++nextId,desc:pendingPayment.desc,amount:pendingPayment.total,guest:g.name,time:ts(),method:'stripe',status:'paid'};
+  const tx={id:++nextId,desc:pendingPayment.desc,amount:pendingPayment.total,guest:g.name,time:ts(),date:today(),method:'stripe',status:'paid'};
   transactions.unshift(tx);
-  if(pendingPayment.closeTab){
-    delete guests[pendingPayment.guestId];
-    if(selectedGuest===pendingPayment.guestId)selectedGuest=null;
-  }
+  if(pendingPayment.closeTab){delete guests[pendingPayment.guestId];if(selectedGuest===pendingPayment.guestId)selectedGuest=null;}
   cart=[];pendingPayment=null;
-  closeModal('stripe-modal');renderCartPanel();renderGuestPills();renderGrid();updateMetrics();renderTabsGrid();
+  saveState();closeModal('stripe-modal');renderCartPanel();renderGuestPills();renderGrid();updateMetrics();renderTabsGrid();
 }
 
 function initCashPayment(){
@@ -517,14 +518,11 @@ function calcChange(){
 function confirmCash(){
   if(!pendingPayment)return;
   const g=guests[pendingPayment.guestId];if(!g)return;
-  const tx={id:++nextId,desc:pendingPayment.desc,amount:pendingPayment.total,guest:g.name,time:ts(),method:'cash',status:'paid'};
+  const tx={id:++nextId,desc:pendingPayment.desc,amount:pendingPayment.total,guest:g.name,time:ts(),date:today(),method:'cash',status:'paid'};
   transactions.unshift(tx);
-  if(pendingPayment.closeTab){
-    delete guests[pendingPayment.guestId];
-    if(selectedGuest===pendingPayment.guestId)selectedGuest=null;
-  }
+  if(pendingPayment.closeTab){delete guests[pendingPayment.guestId];if(selectedGuest===pendingPayment.guestId)selectedGuest=null;}
   cart=[];pendingPayment=null;
-  closeModal('cash-modal');renderCartPanel();renderGuestPills();renderGrid();updateMetrics();renderTabsGrid();
+  saveState();closeModal('cash-modal');renderCartPanel();renderGuestPills();renderGrid();updateMetrics();renderTabsGrid();
 }
 
 function closeGuestTabWithPayment(id,method){
@@ -542,7 +540,8 @@ function closeGuestTabWithPayment(id,method){
 }
 
 function updateMetrics(){
-  const paid=transactions.filter(t=>t.status==='paid');
+  const todayStr=new Date().toDateString();
+  const paid=transactions.filter(t=>t.status==='paid'&&t.date===todayStr);
   document.getElementById('m-revenue').textContent=fmt(paid.reduce((s,t)=>s+t.amount,0));
   document.getElementById('m-count').textContent=paid.length;
   document.getElementById('m-tabs').textContent=Object.keys(guests).length;
@@ -558,13 +557,13 @@ function renderTabsGrid(){
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
         <div class="avatar">${initials(g.name)}</div>
         <div style="flex:1;min-width:0">
-          <p style="font-size:14px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${g.name}</p>
-          <p style="font-size:12px;color:#aaa">${g.note?g.note+' · ':''}Opened ${g.openedAt}</p>
+          <p style="font-size:14px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${g.name}</p>
+          <p style="font-size:12px;color:var(--text2)">${g.note?g.note+' · ':''}Opened ${g.openedAt}</p>
         </div>
-        <span style="font-size:17px;font-weight:500;flex-shrink:0">${fmt(g.total)}</span>
+        <span style="font-size:18px;font-weight:500;color:var(--amber);flex-shrink:0">${fmt(g.total)}</span>
       </div>
-      <div style="border-top:1px solid #f0ede8;padding-top:8px;margin-bottom:12px;max-height:100px;overflow-y:auto">
-        ${g.items.length?g.items.map(i=>`<div style="font-size:12px;color:#aaa;padding:2px 0">${i.time} — ${i.desc} — ${fmt(i.amount)}</div>`).join(''):'<p class="empty" style="font-size:12px">No items yet.</p>'}
+      <div style="border-top:1px solid var(--border);padding-top:8px;margin-bottom:12px;max-height:90px;overflow-y:auto">
+        ${g.items.length?g.items.map(i=>`<div style="font-size:12px;color:var(--text2);padding:2px 0">${i.time} — ${i.desc} — ${fmt(i.amount)}</div>`).join(''):'<p class="empty" style="font-size:12px">No items yet.</p>'}
       </div>
       <div style="display:flex;gap:6px">
         <button class="action-btn" style="flex:1;text-align:center;font-size:12px" onclick="selectGuest('${k}');showPage('charge')">Add drinks</button>
@@ -581,23 +580,27 @@ function renderTx(){
     const badge=t.method==='cash'?'badge-cash':t.method==='stripe'?'badge-stripe':'badge-tab';
     const label=t.method==='cash'?'Cash':t.method==='stripe'?'Link':'Tab';
     return `<div class="tx-grid">
-      <span>${t.desc}</span>
-      <span class="g-col" style="color:#aaa;font-size:12px">${t.guest}</span>
-      <span style="color:#aaa;font-size:12px">${t.time}</span>
+      <span style="color:var(--text)">${t.desc}</span>
+      <span class="g-col" style="color:var(--text2);font-size:12px">${t.guest}</span>
+      <span style="color:var(--text2);font-size:12px">${t.time}</span>
       <span><span class="badge ${badge}">${label}</span></span>
-      <span style="text-align:right;font-weight:500">${fmt(t.amount)}</span>
+      <span style="text-align:right;font-weight:500;color:var(--amber)">${fmt(t.amount)}</span>
     </div>`;
   }).join('');
 }
 
 function saveSettings(){
   stripeLink=document.getElementById('stripe-link').value.trim();
+  saveState();
   const st=document.getElementById('settings-status');
   st.textContent='Saved!';setTimeout(()=>st.textContent='',2000);
 }
 
 renderGrid();
 renderGuestPills();
+updateMetrics();
+// restore stripe link input
+document.getElementById('stripe-link').value = stripeLink;
 </script>
 </body>
 </html>
