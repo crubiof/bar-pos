@@ -28,16 +28,16 @@
   --red-bg:    #280c08;
   --red-txt:   #d06050;
 }
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:18px;font-weight:500}
 
 .topbar{display:flex;align-items:center;justify-content:space-between;padding:.75rem 1.5rem;background:var(--bg2);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:50}
-.topbar h1{font-size:16px;font-weight:500;color:var(--amber);letter-spacing:.02em}
+.topbar h1{font-size:20px;font-weight:700;color:var(--amber);letter-spacing:.02em}
 .topbar-metrics{display:flex;gap:2rem}
-.topbar-metric .lbl{font-size:11px;color:var(--text2);margin-bottom:2px}
+.topbar-metric .lbl{font-size:13px;color:var(--text2);margin-bottom:2px;font-weight:500}
 .topbar-metric .val{font-size:16px;font-weight:500;color:var(--text)}
 
 .nav-tabs{display:flex;gap:4px;padding:.6rem 1.5rem;background:var(--bg2);border-bottom:1px solid var(--border)}
-.nav-tabs button{padding:6px 16px;font-size:13px;border-radius:6px;border:1px solid transparent;background:transparent;color:var(--text2);cursor:pointer;transition:all .15s}
+.nav-tabs button{padding:10px 22px;font-size:17px;font-weight:600;border-radius:6px;border:1px solid transparent;background:transparent;color:var(--text2);cursor:pointer;transition:all .15s}
 .nav-tabs button:hover{color:var(--text);background:var(--bg3)}
 .nav-tabs button.active{background:var(--amber-dim);color:var(--amber);border-color:var(--amber-mid);font-weight:500}
 
@@ -48,30 +48,30 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .charge-right{width:340px;flex-shrink:0;overflow-y:auto;padding:1.25rem;background:var(--bg2)}
 
 .card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:1.25rem;margin-bottom:1rem}
-.card-title{font-size:10px;font-weight:600;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px}
+.card-title{font-size:13px;font-weight:700;color:var(--text3);letter-spacing:.07em;text-transform:uppercase;margin-bottom:12px}
 
-.cat-label{font-size:10px;font-weight:600;color:var(--text3);letter-spacing:.07em;text-transform:uppercase;grid-column:1/-1;margin-top:10px;margin-bottom:4px}
-.item-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px}
-.item-btn{padding:11px 8px;border-radius:8px;border:1px solid var(--border2);background:var(--bg3);cursor:pointer;text-align:center;transition:all .12s;user-select:none}
+.cat-label{font-size:13px;font-weight:700;color:var(--text3);letter-spacing:.07em;text-transform:uppercase;grid-column:1/-1;margin-top:12px;margin-bottom:6px}
+.item-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px}
+.item-btn{padding:16px 8px;border-radius:10px;border:1px solid var(--border2);background:var(--bg3);cursor:pointer;text-align:center;transition:all .12s;user-select:none}
 .item-btn:hover{border-color:var(--amber-mid);background:#2a2418}
 .item-btn:active{transform:scale(.97)}
-.item-btn .name{font-size:12px;font-weight:500;color:var(--text);margin-bottom:3px;line-height:1.3}
-.item-btn .price{font-size:13px;color:var(--amber);font-weight:500}
-.item-btn .note{font-size:10px;color:var(--text3);margin-top:3px;line-height:1.2}
+.item-btn .name{font-size:16px;font-weight:600;color:var(--text);margin-bottom:4px;line-height:1.3}
+.item-btn .price{font-size:18px;color:var(--amber);font-weight:700}
+.item-btn .note{font-size:12px;color:var(--text3);margin-top:3px;line-height:1.2}
 .item-btn.happy{border-color:var(--amber-mid);background:var(--amber-dim)}
 .item-btn.happy .name{color:var(--amber)}
 .item-btn.happy .price{color:#ffc040}
 .item-btn.disabled{opacity:.25;cursor:not-allowed}
 
-.guest-pill{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:20px;font-size:13px;font-weight:500;background:var(--bg3);color:var(--text2);cursor:pointer;border:1px solid var(--border2);transition:all .12s;margin:3px}
+.guest-pill{display:inline-flex;align-items:center;gap:8px;padding:11px 20px;border-radius:20px;font-size:17px;font-weight:600;background:var(--bg3);color:var(--text2);cursor:pointer;border:1px solid var(--border2);transition:all .12s;margin:3px}
 .guest-pill:hover{border-color:var(--amber-mid);color:var(--text)}
 .guest-pill.selected{background:var(--amber-dim);color:var(--amber);border-color:var(--amber-mid)}
 .guest-pill .amt{font-size:11px;font-weight:400;opacity:.7;margin-left:2px}
 
-.cart-row{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border);font-size:13px;color:var(--text)}
+.cart-row{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--border);font-size:17px;font-weight:500;color:var(--text)}
 .cart-row:last-child{border-bottom:none}
 .qty-ctrl{display:flex;align-items:center;gap:6px}
-.qty-ctrl button{width:26px;height:26px;border-radius:50%;border:1px solid var(--border2);background:var(--bg3);cursor:pointer;font-size:16px;line-height:1;color:var(--text)}
+.qty-ctrl button{width:36px;height:36px;border-radius:50%;border:1px solid var(--border2);background:var(--bg3);cursor:pointer;font-size:20px;line-height:1;color:var(--text)}
 .qty-ctrl button:hover{border-color:var(--amber-mid);color:var(--amber)}
 
 input,select{width:100%;padding:9px 11px;font-size:13px;border:1px solid var(--border2);border-radius:8px;background:var(--bg3);color:var(--text);outline:none;transition:border-color .15s}
@@ -79,47 +79,47 @@ input:focus,select:focus{border-color:var(--amber-mid)}
 input[readonly]{background:var(--bg);color:var(--text2)}
 input::placeholder{color:var(--text3)}
 
-.btn-amber{width:100%;padding:13px;font-size:14px;font-weight:500;border-radius:8px;border:1px solid var(--amber-mid);background:var(--amber-dim);color:var(--amber);cursor:pointer;transition:all .15s}
+.btn-amber{width:100%;padding:18px;font-size:18px;font-weight:700;border-radius:10px;border:1px solid var(--amber-mid);background:var(--amber-dim);color:var(--amber);cursor:pointer;transition:all .15s}
 .btn-amber:hover{background:#4a3810;border-color:var(--amber)}
 .btn-amber:disabled{opacity:.3;cursor:not-allowed}
 
-.btn-green{width:100%;padding:13px;font-size:14px;font-weight:500;border-radius:8px;border:1px solid var(--green);background:var(--green-bg);color:var(--green-txt);cursor:pointer;transition:all .15s}
+.btn-green{width:100%;padding:18px;font-size:18px;font-weight:700;border-radius:10px;border:1px solid var(--green);background:var(--green-bg);color:var(--green-txt);cursor:pointer;transition:all .15s}
 .btn-green:hover{opacity:.85}
 
-.btn-blue{width:100%;padding:13px;font-size:14px;font-weight:500;border-radius:8px;border:1px solid var(--blue);background:var(--blue-bg);color:var(--blue-txt);cursor:pointer;transition:all .15s}
+.btn-blue{width:100%;padding:18px;font-size:18px;font-weight:700;border-radius:10px;border:1px solid var(--blue);background:var(--blue-bg);color:var(--blue-txt);cursor:pointer;transition:all .15s}
 .btn-blue:hover{opacity:.85}
 .btn-blue:disabled{opacity:.3;cursor:not-allowed}
 
-.action-btn{padding:8px 14px;font-size:13px;border-radius:8px;border:1px solid var(--border2);background:transparent;cursor:pointer;color:var(--text2);white-space:nowrap;transition:all .12s}
+.action-btn{padding:11px 18px;font-size:15px;font-weight:600;border-radius:8px;border:1px solid var(--border2);background:transparent;cursor:pointer;color:var(--text2);white-space:nowrap;transition:all .12s}
 .action-btn:hover{background:var(--bg3);color:var(--text)}
 .danger-btn{color:var(--red-txt);border-color:var(--red)}
 .danger-btn:hover{background:var(--red-bg)}
 
-.badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:20px;font-weight:500}
+.badge{display:inline-block;font-size:13px;padding:3px 10px;border-radius:20px;font-weight:600}
 .badge-cash{background:#2a1e00;color:#d4900a}
 .badge-stripe{background:var(--blue-bg);color:var(--blue-txt)}
 .badge-tab{background:var(--bg3);color:var(--text2)}
 
-.tx-grid{display:grid;grid-template-columns:1fr 100px 60px 60px 80px;gap:8px;align-items:center;padding:9px 0;border-bottom:1px solid var(--border);font-size:13px}
+.tx-grid{display:grid;grid-template-columns:1fr 100px 60px 60px 80px;gap:8px;align-items:center;padding:11px 0;border-bottom:1px solid var(--border);font-size:15px;font-weight:500}
 .tx-grid:last-child{border-bottom:none}
-.tx-head{font-size:10px;color:var(--text3);font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+.tx-head{font-size:12px;color:var(--text3);font-weight:700;letter-spacing:.04em;text-transform:uppercase}
 
 .avatar{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500;background:var(--amber-dim);color:var(--amber);flex-shrink:0;border:1px solid var(--amber-mid)}
 
 .modal-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.75);z-index:200;align-items:center;justify-content:center}
 .modal-overlay.open{display:flex}
 .modal{background:var(--bg2);border-radius:12px;border:1px solid var(--border2);padding:1.5rem;width:360px;box-shadow:0 8px 40px rgba(0,0,0,.5)}
-.modal h3{font-size:15px;font-weight:500;color:var(--text);margin-bottom:1.25rem}
+.modal h3{font-size:19px;font-weight:700;color:var(--text);margin-bottom:1.25rem}
 .field{margin-bottom:12px}
-.field label{font-size:12px;color:var(--text2);display:block;margin-bottom:4px}
-.amount-big{font-size:52px;font-weight:500;color:var(--amber);text-align:center;padding:1rem 0;line-height:1}
+.field label{font-size:15px;font-weight:600;color:var(--text2);display:block;margin-bottom:6px}
+.amount-big{font-size:64px;font-weight:500;color:var(--amber);text-align:center;padding:1rem 0;line-height:1}
 .link-box{display:block;width:100%;padding:13px;border-radius:8px;border:1px solid var(--blue);background:var(--blue-bg);color:var(--blue-txt);font-size:13px;font-weight:500;text-align:center;text-decoration:none;margin-bottom:8px;transition:opacity .15s}
 .link-box:hover{opacity:.8}
 .step{display:flex;gap:10px;margin-bottom:10px;align-items:flex-start}
 .step-n{width:22px;height:22px;border-radius:50%;background:var(--bg3);color:var(--text2);font-size:12px;font-weight:500;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;border:1px solid var(--border2)}
-.step-t{font-size:13px;color:var(--text2);line-height:1.5}
-.step-t strong{color:var(--text);font-weight:500}
-.empty{font-size:13px;color:var(--text3);padding:4px 0}
+.step-t{font-size:16px;color:var(--text2);line-height:1.6}
+.step-t strong{color:var(--text);font-weight:700}
+.empty{font-size:15px;color:var(--text3);padding:4px 0}
 .divider{border-top:1px solid var(--border);margin:12px 0}
 
 @media(max-width:768px){
@@ -193,9 +193,22 @@ input::placeholder{color:var(--text3)}
         </div>
         <div id="cart-items"><p class="empty">Tap menu items to add.</p></div>
         <div class="divider"></div>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+          <span style="font-size:15px;font-weight:600;color:var(--text2);white-space:nowrap">Discount</span>
+          <input id="discount-val" type="number" min="0" step="0.01" placeholder="0" oninput="renderCartPanel()" style="flex:1;font-size:16px;font-weight:600;text-align:center">
+          <div style="display:flex;border:1px solid var(--border2);border-radius:8px;overflow:hidden">
+            <button id="disc-pct-btn" onclick="setDiscMode('pct')" style="padding:8px 14px;font-size:14px;font-weight:700;border:none;background:var(--amber-dim);color:var(--amber);cursor:pointer">%</button>
+            <button id="disc-amt-btn" onclick="setDiscMode('amt')" style="padding:8px 14px;font-size:14px;font-weight:700;border:none;background:var(--bg3);color:var(--text2);cursor:pointer">$</button>
+          </div>
+        </div>
+        <div id="discount-row" style="display:none;justify-content:space-between;align-items:center;margin-bottom:8px">
+          <span style="font-size:15px;color:var(--red-txt)" id="discount-label">Discount</span>
+          <span style="font-size:18px;font-weight:600;color:var(--red-txt)" id="discount-amount">-$0.00</span>
+        </div>
+        <div class="divider"></div>
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
           <span style="font-size:13px;color:var(--text2)">Total</span>
-          <span style="font-size:24px;font-weight:500;color:var(--amber)" id="cart-total">$0.00</span>
+          <span style="font-size:32px;font-weight:500;color:var(--amber)" id="cart-total">$0.00</span>
         </div>
         <div style="display:flex;gap:8px">
           <button class="btn-amber" id="add-tab-btn" onclick="addToTab()" style="flex:1">Add to tab</button>
@@ -207,7 +220,7 @@ input::placeholder{color:var(--text3)}
         <p class="card-title">Tab running total</p>
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
           <span style="font-size:13px;color:var(--text2)">On tab</span>
-          <span style="font-size:20px;font-weight:500;color:var(--text)" id="tab-running-total">$0.00</span>
+          <span style="font-size:28px;font-weight:500;color:var(--text)" id="tab-running-total">$0.00</span>
         </div>
         <div style="display:flex;gap:8px">
           <button class="btn-blue" onclick="closeCurrentTab('stripe')" style="flex:1;padding:10px;font-size:13px">Pay via link</button>
@@ -221,7 +234,7 @@ input::placeholder{color:var(--text3)}
 <!-- TABS -->
 <div id="tabs" class="page-single">
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
-    <p style="font-size:16px;font-weight:500;color:var(--text)">Open tabs</p>
+    <p style="font-size:20px;font-weight:700;color:var(--text)">Open tabs</p>
     <button class="btn-amber" onclick="openModal('new-guest-modal')" style="width:auto;padding:7px 14px;font-size:13px">+ New guest</button>
   </div>
   <div id="tabs-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px">
@@ -231,7 +244,7 @@ input::placeholder{color:var(--text3)}
 
 <!-- TRANSACTIONS -->
 <div id="transactions" class="page-single">
-  <p style="font-size:16px;font-weight:500;margin-bottom:1rem;color:var(--text)">Transaction history</p>
+  <p style="font-size:20px;font-weight:700;margin-bottom:1rem;color:var(--text)">Transaction history</p>
   <div class="card">
     <div class="tx-grid tx-head" style="border-bottom:1px solid var(--border);padding-bottom:8px;margin-bottom:2px">
       <span>Description</span><span class="g-col">Guest</span><span>Time</span><span>Method</span><span style="text-align:right">Amount</span>
@@ -242,7 +255,7 @@ input::placeholder{color:var(--text3)}
 
 <!-- SETTINGS -->
 <div id="settings" class="page-single">
-  <p style="font-size:16px;font-weight:500;margin-bottom:1rem;color:var(--text)">Settings</p>
+  <p style="font-size:20px;font-weight:700;margin-bottom:1rem;color:var(--text)">Settings</p>
   <div class="card" style="max-width:520px">
     <p class="card-title">Stripe payment link</p>
     <p style="font-size:13px;color:var(--text2);margin-bottom:12px;line-height:1.6">Guests open this link and enter the amount you tell them.</p>
@@ -302,7 +315,7 @@ input::placeholder{color:var(--text3)}
     <div class="field"><label>Cash received</label><input id="cash-received" type="number" min="0" step="0.01" placeholder="0.00" oninput="calcChange()"></div>
     <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-top:1px solid var(--border);margin-bottom:16px">
       <span style="font-size:13px;color:var(--text2)">Change</span>
-      <span style="font-size:26px;font-weight:500;color:var(--green-txt)" id="cash-change">$0.00</span>
+      <span style="font-size:36px;font-weight:500;color:var(--green-txt)" id="cash-change">$0.00</span>
     </div>
     <div style="display:flex;gap:8px">
       <button class="btn-green" onclick="confirmCash()" style="flex:1">Confirm cash</button>
@@ -348,7 +361,7 @@ let transactions  = _s?.transactions || [];
 let nextId        = _s?.nextId       || 300;
 let stripeLink    = _s?.stripeLink   || 'https://buy.stripe.com/14A00k3QJfwScun3Zle7m01';
 let selectedGuest = (_s?.selectedGuest && _s?.guests?.[_s.selectedGuest]) ? _s.selectedGuest : null;
-let cart=[], pendingPayment=null;
+let cart=[], pendingPayment=null, discMode='pct';
 
 const fmt=n=>'$'+n.toFixed(2);
 const ts=()=>{const d=new Date();return d.getHours().toString().padStart(2,'0')+':'+d.getMinutes().toString().padStart(2,'0');};
@@ -386,6 +399,22 @@ function createGuest(){
   closeModal('new-guest-modal');
   selectedGuest=id;cart=[];
   saveState();renderGuestPills();renderGrid();renderCartPanel();updateMetrics();
+}
+
+function setDiscMode(mode){
+  discMode=mode;
+  document.getElementById('disc-pct-btn').style.background = mode==='pct' ? 'var(--amber-dim)' : 'var(--bg3)';
+  document.getElementById('disc-pct-btn').style.color      = mode==='pct' ? 'var(--amber)'     : 'var(--text2)';
+  document.getElementById('disc-amt-btn').style.background = mode==='amt' ? 'var(--amber-dim)' : 'var(--bg3)';
+  document.getElementById('disc-amt-btn').style.color      = mode==='amt' ? 'var(--amber)'     : 'var(--text2)';
+  renderCartPanel();
+}
+
+function getDiscount(subtotal){
+  const val=parseFloat(document.getElementById('discount-val')?.value)||0;
+  if(val<=0) return 0;
+  if(discMode==='pct') return Math.min(subtotal, subtotal*(val/100));
+  return Math.min(subtotal, val);
 }
 
 function selectGuest(id){selectedGuest=id;cart=[];renderGuestPills();renderGrid();renderCartPanel();}
@@ -441,7 +470,7 @@ function changeQty(id,delta){
   renderCartPanel();
 }
 
-function clearCart(){cart=[];renderCartPanel();}
+function clearCart(){cart=[];document.getElementById('discount-val').value='';renderCartPanel();}
 
 function renderCartPanel(){
   const g=selectedGuest&&guests[selectedGuest];
@@ -460,7 +489,18 @@ function renderCartPanel(){
       </div>
       <span style="color:var(--amber)">${fmt(c.price*c.qty)}</span>
     </div>`).join(''):'<p class="empty">Tap menu items to add.</p>';
-  document.getElementById('cart-total').textContent=fmt(total);
+  const disc=getDiscount(total);
+  const discRow=document.getElementById('discount-row');
+  const discVal=parseFloat(document.getElementById('discount-val')?.value)||0;
+  if(disc>0){
+    discRow.style.display='flex';
+    document.getElementById('discount-label').textContent=
+      discMode==='pct' ? 'Discount ('+discVal+'%)' : 'Discount';
+    document.getElementById('discount-amount').textContent='-'+fmt(disc);
+  } else {
+    discRow.style.display='none';
+  }
+  document.getElementById('cart-total').textContent=fmt(Math.max(0,total-disc));
   const ts_card=document.getElementById('tab-summary-card');
   ts_card.style.display=g.total>0?'block':'none';
   document.getElementById('tab-running-total').textContent=fmt(g.total);
@@ -469,8 +509,10 @@ function renderCartPanel(){
 function addToTab(){
   if(!cart.length||!selectedGuest||!guests[selectedGuest])return;
   const g=guests[selectedGuest];
-  const total=cart.reduce((s,c)=>s+c.price*c.qty,0);
-  const desc=cart.map(c=>`${c.qty}x ${c.name}`).join(', ');
+  const subtotal=cart.reduce((s,c)=>s+c.price*c.qty,0);
+  const disc=getDiscount(subtotal);
+  const total=Math.max(0,subtotal-disc);
+  const desc=cart.map(c=>`${c.qty}x ${c.name}`).join(', ')+(disc>0?' (-'+fmt(disc)+')':'');
   const tx={id:++nextId,desc,amount:total,guest:g.name,time:ts(),date:today(),method:'tab',status:'tab'};
   g.total+=total;g.items.push(tx);transactions.unshift(tx);
   cart=[];saveState();renderCartPanel();renderGuestPills();updateMetrics();
@@ -508,11 +550,13 @@ function confirmStripePayment(){
 
 function initCashPayment(){
   if(!cart.length||!selectedGuest||!guests[selectedGuest])return;
-  const total=cart.reduce((s,c)=>s+c.price*c.qty,0);
+  const _sub=cart.reduce((s,c)=>s+c.price*c.qty,0);
+  const _disc=getDiscount(_sub);
+  const total=Math.max(0,_sub-_disc);
   const g=guests[selectedGuest];
   document.getElementById('cash-guest-name').textContent=g.name;
   document.getElementById('cash-amount-display').value=fmt(total);
-  pendingPayment={guestId:selectedGuest,total,desc:cart.map(c=>`${c.qty}x ${c.name}`).join(', '),closeTab:false};
+  pendingPayment={guestId:selectedGuest,total,desc:cart.map(c=>`${c.qty}x ${c.name}`).join(', ')+(_disc>0?' (-'+fmt(_disc)+')':''),closeTab:false};
   openModal('cash-modal');
 }
 
