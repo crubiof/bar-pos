@@ -250,6 +250,13 @@ input::placeholder{color:var(--text3)}
     <button class="action-btn" onclick="saveSettings()">Save</button>
     <span id="settings-status" style="font-size:12px;margin-left:8px;color:var(--green-txt)"></span>
   </div>
+
+  <div class="card" style="max-width:520px;border-color:var(--red);margin-top:.5rem">
+    <p class="card-title" style="color:var(--red-txt)">Danger zone</p>
+    <p style="font-size:13px;color:var(--text2);margin-bottom:14px;line-height:1.6">Permanently deletes all transactions, open tabs, and today's revenue. Cannot be undone.</p>
+    <button class="action-btn danger-btn" onclick="confirmClearAll()" style="font-size:13px;padding:9px 16px">Clear all data</button>
+    <span id="clear-status" style="font-size:12px;margin-left:8px;color:var(--red-txt)"></span>
+  </div>
 </div>
 
 <!-- NEW GUEST MODAL -->
@@ -587,6 +594,32 @@ function renderTx(){
       <span style="text-align:right;font-weight:500;color:var(--amber)">${fmt(t.amount)}</span>
     </div>`;
   }).join('');
+}
+
+function confirmClearAll(){
+  const pin=prompt("Enter PIN to clear all data:");
+  if(pin===null) return;
+  if(pin!=='16735330'){
+    const st=document.getElementById('clear-status');
+    st.textContent='Incorrect PIN.';
+    st.style.color='var(--red-txt)';
+    setTimeout(()=>{st.textContent='';},2500);
+    return;
+  }
+  guests={};
+  transactions=[];
+  cart=[];
+  selectedGuest=null;
+  nextId=300;
+  localStorage.removeItem(STORE_KEY);
+  renderGuestPills();
+  renderGrid();
+  renderCartPanel();
+  updateMetrics();
+  const st=document.getElementById('clear-status');
+  st.textContent='All data cleared.';
+  st.style.color='var(--green-txt)';
+  setTimeout(()=>st.textContent='',3000);
 }
 
 function saveSettings(){
